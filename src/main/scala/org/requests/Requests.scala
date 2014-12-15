@@ -1,5 +1,8 @@
 package org.requests
 
+import java.io.File
+import java.net.URL
+
 import scala.concurrent.Future
 
 trait Header
@@ -8,6 +11,14 @@ case class ResponseHeader(name: String, value: String) extends Header
 
 trait Cookie
 trait PreparedRequest
+
+sealed trait RequestMethod
+case object Head   extends RequestMethod
+case object Get    extends RequestMethod
+case object Post   extends RequestMethod
+case object Put    extends RequestMethod
+case object Patch  extends RequestMethod
+case object Delete extends RequestMethod
 
 trait Response {
   def apparentEncoding: String
@@ -32,7 +43,23 @@ trait Response {
 }
 
 trait Requests {
-  def request: Future[Response]
+  def request(
+    method: RequestMethod,
+    url: URL,
+    params: Map[String, String] = Map.empty,
+    data: Option[String] = None,
+    json: Option[String] = None,
+    headers: Seq[RequestHeader] = Seq.empty,
+    cookies: Seq[Cookie] = Seq.empty,
+    files: Map[String, File] = Map.empty,
+    //auth
+    timeout: Int,
+    allowRedirects: Boolean = true,
+    //proxies
+    //verify
+    stream: Boolean = false
+    //cert
+  ): Future[Response]
 
   def head: Future[Response]
   def get: Future[Response]
