@@ -12,16 +12,6 @@ case class ResponseHeader(name: String, value: String) extends Header
 trait Cookie
 trait PreparedRequest
 
-sealed trait RequestMethod
-object RequestMethod {
-  case object Head   extends RequestMethod
-  case object Get    extends RequestMethod
-  case object Post   extends RequestMethod
-  case object Put    extends RequestMethod
-  case object Patch  extends RequestMethod
-  case object Delete extends RequestMethod
-}
-
 trait Response {
   def apparentEncoding: String
   def content: Array[Byte]
