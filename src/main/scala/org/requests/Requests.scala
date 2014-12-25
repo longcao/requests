@@ -41,7 +41,7 @@ trait Requests {
     cookies: Seq[Cookie] = Seq.empty,
     files: Map[String, File] = Map.empty,
     //auth
-    timeout: Int,
+    timeout: Option[Int] = None,
     allowRedirects: Boolean = true,
     //proxies
     //verify
@@ -58,7 +58,7 @@ trait Requests {
     cookies: Seq[Cookie] = Seq.empty,
     files: Map[String, File] = Map.empty,
     //auth
-    timeout: Int,
+    timeout: Option[Int] = None,
     allowRedirects: Boolean = true,
     //proxies
     //verify
@@ -88,7 +88,7 @@ object Requests extends Requests {
     cookies: Seq[Cookie] = Seq.empty,
     files: Map[String, File] = Map.empty,
     //auth
-    timeout: Int,
+    timeout: Option[Int] = None,
     allowRedirects: Boolean = true,
     //proxies
     //verify
