@@ -43,7 +43,7 @@ trait Requests {
     stream: Boolean = false
     //cert
   ): Future[Response] = {
-    request(RequestMethod.Get, url, params, data, json, headers, cookies, files, timeout, allowRedirects, stream)
+    request(RequestMethod.GET, url, params, data, json, headers, cookies, files, timeout, allowRedirects, stream)
   }
 
   def head: Future[Response]
