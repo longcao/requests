@@ -1,6 +1,6 @@
 import org.requests.Requests
 
-import scala.concurrent.{ Await, Future }
+import scala.concurrent.Await
 import scala.concurrent.duration._
 
 object Main extends App {

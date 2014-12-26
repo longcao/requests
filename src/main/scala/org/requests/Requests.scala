@@ -7,8 +7,6 @@ import java.net.URL
 
 import scala.concurrent.{ Future, Promise }
 
-trait PreparedRequest
-
 trait Requests {
   protected def defaultClient: AsyncHttpClient = new AsyncHttpClient()
 
@@ -46,7 +44,18 @@ trait Requests {
     stream: Boolean = false
     //cert
   )(implicit client: AsyncHttpClient = defaultClient): Future[Response] = {
-    request(RequestMethod.GET, url, params, data, json, headers, cookies, files, timeout, allowRedirects, stream)
+    request(
+      method = RequestMethod.GET,
+      url = url,
+      params = params,
+      data = data,
+      json = json,
+      headers = headers,
+      cookies = cookies,
+      files = files,
+      timeout = timeout,
+      allowRedirects = allowRedirects,
+      stream = stream)
   }
 
   def head: Future[Response]
@@ -94,7 +103,9 @@ object Requests extends Requests {
         override def onThrowable(t: Throwable): Unit = {
           result.failure(t)
         }
-      })
+      }
+    )
+
     result.future
   }
 

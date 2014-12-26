@@ -18,7 +18,7 @@ trait Response {
   //def links
   //def raw
   def reason: String
-  //def request: PreparedRequest
+  //def request
   def statusCode: Int
   def text: String
   def url: String
@@ -49,7 +49,7 @@ case class ResponseImpl(
   //links,
   //raw,
   reason: String,
-  //request: PreparedRequest,
+  //request,
   statusCode: Int,
   url: String) extends Response {
 
