@@ -10,6 +10,8 @@ import scala.concurrent.{ Future, Promise }
 trait PreparedRequest
 
 trait Requests {
+  protected def defaultClient: AsyncHttpClient = new AsyncHttpClient()
+
   def request(
     method: RequestMethod,
     url: URL,
@@ -26,7 +28,7 @@ trait Requests {
     //verify
     stream: Boolean = false
     //cert
-  ): Future[Response]
+  )(implicit client: AsyncHttpClient = defaultClient): Future[Response]
 
   def get(
     url: URL,
@@ -43,7 +45,7 @@ trait Requests {
     //verify
     stream: Boolean = false
     //cert
-  ): Future[Response] = {
+  )(implicit client: AsyncHttpClient = defaultClient): Future[Response] = {
     request(RequestMethod.GET, url, params, data, json, headers, cookies, files, timeout, allowRedirects, stream)
   }
 
@@ -57,9 +59,6 @@ trait Requests {
 }
 
 object Requests extends Requests {
-  // figure out client configuration here (timeout, executorservice, etc)
-  lazy val asyncHttpClient: AsyncHttpClient = new AsyncHttpClient()
-
   def request(
     method: RequestMethod,
     url: URL,
@@ -76,7 +75,7 @@ object Requests extends Requests {
     //verify
     stream: Boolean = false
     //cert
-  ): Future[Response] = {
+  )(implicit client: AsyncHttpClient = defaultClient): Future[Response] = {
 
     // configure the request
     val requestBuilder = new RequestBuilder(method.toString)
@@ -85,7 +84,7 @@ object Requests extends Requests {
 
     val result = Promise[Response]()
 
-    asyncHttpClient.executeRequest(
+    client.executeRequest(
       requestBuilder.build(),
       new AsyncCompletionHandler[NingResponse]() {
         override def onCompleted(ningResponse: NingResponse): NingResponse = {
