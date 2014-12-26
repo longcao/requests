@@ -1,9 +1,11 @@
 package org.requests
 
+import com.ning.http.client.{ AsyncHttpClient, AsyncCompletionHandler, Response => NingResponse, RequestBuilder }
+
 import java.io.File
 import java.net.URL
 
-import scala.concurrent.Future
+import scala.concurrent.{ Future, Promise }
 
 trait PreparedRequest
 
@@ -55,6 +57,9 @@ trait Requests {
 }
 
 object Requests extends Requests {
+  // figure out client configuration here (timeout, executorservice, etc)
+  lazy val asyncHttpClient: AsyncHttpClient = new AsyncHttpClient()
+
   def request(
     method: RequestMethod,
     url: URL,
@@ -71,7 +76,28 @@ object Requests extends Requests {
     //verify
     stream: Boolean = false
     //cert
-  ): Future[Response] = ???
+  ): Future[Response] = {
+
+    // configure the request
+    val requestBuilder = new RequestBuilder(method.toString)
+      .setUrl(url.toString)
+      .setFollowRedirects(allowRedirects)
+
+    val result = Promise[Response]()
+
+    asyncHttpClient.executeRequest(
+      requestBuilder.build(),
+      new AsyncCompletionHandler[NingResponse]() {
+        override def onCompleted(ningResponse: NingResponse): NingResponse = {
+          result.success(Response(ningResponse))
+          ningResponse
+        }
+        override def onThrowable(t: Throwable): Unit = {
+          result.failure(t)
+        }
+      })
+    result.future
+  }
 
   def head: Future[Response] = ???
   def post: Future[Response] = ???
