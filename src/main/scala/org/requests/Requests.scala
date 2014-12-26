@@ -5,7 +5,6 @@ import java.net.URL
 
 import scala.concurrent.Future
 
-trait Cookie
 trait PreparedRequest
 
 trait Requests {
