@@ -59,3 +59,4 @@ case class ResponseImpl(
   lazy val json: String = "placeholder"
   lazy val text: String = "placeholder"
 }
+
