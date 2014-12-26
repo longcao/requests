@@ -16,7 +16,7 @@ trait Requests {
     params: Map[String, String] = Map.empty,
     data: Option[String] = None,
     json: Option[String] = None,
-    headers: Seq[RequestHeader] = Seq.empty,
+    headers: Map[String, Seq[String]] = Map.empty,
     cookies: Seq[Cookie] = Seq.empty,
     files: Map[String, File] = Map.empty,
     //auth
@@ -33,7 +33,7 @@ trait Requests {
     params: Map[String, String] = Map.empty,
     data: Option[String] = None,
     json: Option[String] = None,
-    headers: Seq[RequestHeader] = Seq.empty,
+    headers: Map[String, Seq[String]] = Map.empty,
     cookies: Seq[Cookie] = Seq.empty,
     files: Map[String, File] = Map.empty,
     //auth
@@ -74,7 +74,7 @@ object Requests extends Requests {
     params: Map[String, String] = Map.empty,
     data: Option[String] = None,
     json: Option[String] = None,
-    headers: Seq[RequestHeader] = Seq.empty,
+    headers: Map[String, Seq[String]] = Map.empty,
     cookies: Seq[Cookie] = Seq.empty,
     files: Map[String, File] = Map.empty,
     //auth
