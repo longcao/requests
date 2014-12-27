@@ -27,6 +27,9 @@ object Cookie {
   /**
    * Converts a Seq[Cookie] into a flattened cookie header in the form of:
    * "Cookie" -> "name1=value2; name2=value2;" etc
+   *
+   * This is used mainly because the conversion from Cookie -> NingCookie
+   * and using RequestBuilder.addCookie is trickier than just adding cookie headers.
    */
   def cookiesToHeader(cookies: Seq[Cookie]): Option[(String, Seq[String])] = {
     val cookieHeaderPairs: Seq[String] = for {
