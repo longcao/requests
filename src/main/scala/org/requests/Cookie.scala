@@ -23,6 +23,24 @@ object Cookie {
       secure = nc.isSecure,
       value = if (nc.getValue.isEmpty) None else Some(nc.getValue))
   }
+
+  /**
+   * Converts a Seq[Cookie] into a flattened cookie header in the form of:
+   * "Cookie" -> "name1=value2; name2=value2;" etc
+   */
+  def cookiesToHeader(cookies: Seq[Cookie]): Option[(String, Seq[String])] = {
+    val cookieHeaderPairs: Seq[String] = for {
+      cookie <- cookies
+      name <- cookie.name
+      value <- cookie.value
+      pair <- Some(s"$name=$value")
+    } yield (pair)
+
+    if (cookieHeaderPairs.isEmpty)
+      None
+    else
+      Some("Cookie" -> Seq(cookieHeaderPairs.mkString("; ") + ";"))
+  }
 }
 
 case class CookieImpl(
