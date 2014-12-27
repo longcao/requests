@@ -1,11 +1,18 @@
 package org.requests
 
-import com.ning.http.client.{ AsyncHttpClient, AsyncCompletionHandler, Response => NingResponse, RequestBuilder }
+import com.ning.http.client.{
+  AsyncHttpClient,
+  AsyncCompletionHandler,
+  FluentCaseInsensitiveStringsMap,
+  Response => NingResponse,
+  RequestBuilder
+}
 
 import java.io.File
 import java.net.URL
 
 import scala.concurrent.{ Future, Promise }
+import scala.collection.JavaConverters.{ mapAsJavaMapConverter, seqAsJavaListConverter }
 
 trait Requests {
   protected def defaultClient: AsyncHttpClient = new AsyncHttpClient()
@@ -86,10 +93,18 @@ object Requests extends Requests {
     //cert
   )(implicit client: AsyncHttpClient = defaultClient): Future[Response] = {
 
+    val nsHeaders: FluentCaseInsensitiveStringsMap = {
+      val hs = headers.map { case (name, values) =>
+          name -> values.asJava.asInstanceOf[java.util.Collection[String]]
+      }.asJava
+      new FluentCaseInsensitiveStringsMap(hs)
+    }
+
     // configure the request
     val requestBuilder = new RequestBuilder(method.toString)
       .setUrl(url.toString)
       .setFollowRedirects(allowRedirects)
+      .setHeaders(nsHeaders)
 
     val result = Promise[Response]()
 
