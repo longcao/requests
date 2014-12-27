@@ -93,8 +93,22 @@ object Requests extends Requests {
     //cert
   )(implicit client: AsyncHttpClient = defaultClient): Future[Response] = {
 
+    //todo: refactor cookie handling into its own method or abstraction
+    val cookieHeaderPairs: Seq[String] = for {
+      cookie <- cookies
+      name <- cookie.name
+      value <- cookie.value
+      pair <- Some(s"$name=$value")
+    } yield (pair)
+
+    val cookieHeader: Option[(String, Seq[String])] =
+      if (cookieHeaderPairs.isEmpty)
+        None
+      else
+        Some("Cookie" -> Seq(cookieHeaderPairs.mkString("; ") + ";"))
+
     val nsHeaders: FluentCaseInsensitiveStringsMap = {
-      val hs = headers.map { case (name, values) =>
+      val hs = (headers ++ cookieHeader).map { case (name, values) =>
           name -> values.asJava.asInstanceOf[java.util.Collection[String]]
       }.asJava
       new FluentCaseInsensitiveStringsMap(hs)
