@@ -2,6 +2,7 @@ package org.requests
 
 import com.ning.http.client.{ Response => NingResponse }
 
+import scala.collection.immutable.Seq
 import scala.collection.JavaConverters._
 
 trait Response {
@@ -28,15 +29,14 @@ trait Response {
 
 object Response {
   def apply(nr: NingResponse): Response = {
-    val headers: Seq[(String, Seq[String])] =
-      mapAsScalaMapConverter(nr.getHeaders)
-        .asScala
-        .map { case (k ,v) => k -> v.asScala.toSeq }
-        .toSeq
+    val headers: Map[String, Seq[String]] =
+      mapAsScalaMapConverter(nr.getHeaders).asScala
+        .map { case (k ,v) => k -> v.asScala.to[Seq] }
+        .toMap
 
     ResponseImpl(
       content = nr.getResponseBodyAsBytes,
-      headers = Map(headers: _*),
+      headers = headers,
       isRedirect = nr.isRedirected,
       reason = nr.getStatusText,
       statusCode = nr.getStatusCode,
