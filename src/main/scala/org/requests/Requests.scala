@@ -14,7 +14,7 @@ import java.net.URL
 import scala.concurrent.{ Future, Promise }
 import scala.collection.JavaConverters.{ mapAsJavaMapConverter, seqAsJavaListConverter }
 
-trait Requests {
+sealed trait Requests {
   protected implicit lazy val defaultClient: AsyncHttpClient = new AsyncHttpClient()
 
   def request(
