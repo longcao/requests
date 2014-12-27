@@ -36,6 +36,7 @@ object Response {
 
     ResponseImpl(
       content = nr.getResponseBodyAsBytes,
+      cookies = nr.getCookies.asScala.to[Seq].map(Cookie(_)),
       headers = headers,
       isRedirect = nr.isRedirected,
       reason = nr.getStatusText,
