@@ -5,6 +5,7 @@ import com.ning.http.client.cookie.{ Cookie => NingCookie }
 trait Cookie {
   def domain: String
   def expires: Option[Long]
+  def httpOnly: Boolean
   def maxAge: Option[Int]
   def name: Option[String]
   def path: String
@@ -17,6 +18,7 @@ object Cookie {
     CookieImpl(
       domain = nc.getDomain,
       expires = if (nc.getExpires == -1) None else Some(nc.getExpires),
+      httpOnly = nc.isHttpOnly,
       maxAge = if (nc.getMaxAge == -1) None else Some(nc.getMaxAge),
       name = if (nc.getName.isEmpty) None else Some(nc.getName),
       path = nc.getPath,
@@ -49,6 +51,7 @@ object Cookie {
 case class CookieImpl(
   domain: String,
   expires: Option[Long],
+  httpOnly: Boolean,
   maxAge: Option[Int],
   name: Option[String],
   path: String,

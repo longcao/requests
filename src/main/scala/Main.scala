@@ -11,6 +11,7 @@ object Main extends App {
     CookieImpl(
       domain = "asdf",
       expires = None,
+      httpOnly = true,
       maxAge = None,
       name = Some("hello"),
       path = "/",
@@ -19,6 +20,7 @@ object Main extends App {
     CookieImpl(
       domain = "asdf",
       expires = None,
+      httpOnly = true,
       maxAge = None,
       name = Some("goodbye"),
       path = "/",
