@@ -15,7 +15,7 @@ import scala.concurrent.{ Future, Promise }
 import scala.collection.JavaConverters.{ mapAsJavaMapConverter, seqAsJavaListConverter }
 
 trait Requests {
-  protected def defaultClient: AsyncHttpClient = new AsyncHttpClient()
+  protected implicit lazy val defaultClient: AsyncHttpClient = new AsyncHttpClient()
 
   def request(
     method: RequestMethod,
@@ -62,7 +62,7 @@ trait Requests {
       files = files,
       timeout = timeout,
       allowRedirects = allowRedirects,
-      stream = stream)
+      stream = stream)(client)
   }
 
   def head: Future[Response]
