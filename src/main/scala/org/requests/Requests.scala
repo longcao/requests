@@ -4,6 +4,7 @@ import com.ning.http.client.{
   AsyncHttpClient,
   AsyncCompletionHandler,
   FluentCaseInsensitiveStringsMap,
+  Param => NingParam,
   Response => NingResponse,
   RequestBuilder
 }
@@ -20,7 +21,7 @@ sealed trait Requests {
   def request(
     method: RequestMethod,
     url: URL,
-    //params: Map[String, String] = Map.empty,
+    params: Map[String, String] = Map.empty,
     //data: Option[String] = None,
     //json: Option[String] = None,
     headers: Map[String, Seq[String]] = Map.empty,
@@ -37,7 +38,7 @@ sealed trait Requests {
 
   def get(
     url: URL,
-    //params: Map[String, String] = Map.empty,
+    params: Map[String, String] = Map.empty,
     //data: Option[String] = None,
     //json: Option[String] = None,
     headers: Map[String, Seq[String]] = Map.empty,
@@ -78,7 +79,7 @@ object Requests extends Requests {
   def request(
     method: RequestMethod,
     url: URL,
-    //params: Map[String, String] = Map.empty,
+    params: Map[String, String] = Map.empty,
     //data: Option[String] = None,
     //json: Option[String] = None,
     headers: Map[String, Seq[String]] = Map.empty,
@@ -101,11 +102,17 @@ object Requests extends Requests {
       new FluentCaseInsensitiveStringsMap(hs)
     }
 
+    val queryParams: java.util.List[NingParam] =
+      params.to[Seq].map { case (name, value) =>
+        new NingParam(name, value)
+      }.asJava
+
     // configure the request
     val requestBuilder = new RequestBuilder(method.toString)
       .setUrl(url.toString)
       .setFollowRedirects(allowRedirects)
       .setHeaders(nsHeaders)
+      .setQueryParams(queryParams)
 
     val result = Promise[Response]()
 
