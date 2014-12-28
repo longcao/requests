@@ -20,49 +20,49 @@ sealed trait Requests {
   def request(
     method: RequestMethod,
     url: URL,
-    params: Map[String, String] = Map.empty,
-    data: Option[String] = None,
-    json: Option[String] = None,
+    //params: Map[String, String] = Map.empty,
+    //data: Option[String] = None,
+    //json: Option[String] = None,
     headers: Map[String, Seq[String]] = Map.empty,
     cookies: Seq[Cookie] = Seq.empty,
-    files: Map[String, File] = Map.empty,
+    //files: Map[String, File] = Map.empty,
     //auth
-    timeout: Option[Int] = None,
-    allowRedirects: Boolean = true,
+    //timeout: Option[Int] = None,
+    allowRedirects: Boolean = true
     //proxies
     //verify
-    stream: Boolean = false
+    //stream: Boolean = false
     //cert
   )(implicit client: AsyncHttpClient = defaultClient): Future[Response]
 
   def get(
     url: URL,
-    params: Map[String, String] = Map.empty,
-    data: Option[String] = None,
-    json: Option[String] = None,
+    //params: Map[String, String] = Map.empty,
+    //data: Option[String] = None,
+    //json: Option[String] = None,
     headers: Map[String, Seq[String]] = Map.empty,
     cookies: Seq[Cookie] = Seq.empty,
-    files: Map[String, File] = Map.empty,
+    //files: Map[String, File] = Map.empty,
     //auth
-    timeout: Option[Int] = None,
-    allowRedirects: Boolean = true,
+    //timeout: Option[Int] = None,
+    allowRedirects: Boolean = true
     //proxies
     //verify
-    stream: Boolean = false
+    //stream: Boolean = false
     //cert
   )(implicit client: AsyncHttpClient = defaultClient): Future[Response] = {
     request(
       method = RequestMethod.GET,
       url = url,
-      params = params,
-      data = data,
-      json = json,
+      //params = params,
+      //data = data,
+      //json = json,
       headers = headers,
       cookies = cookies,
-      files = files,
-      timeout = timeout,
-      allowRedirects = allowRedirects,
-      stream = stream)(client)
+      //files = files,
+      //timeout = timeout)
+      allowRedirects = allowRedirects)(client)
+      //stream = stream)
   }
 
   def head: Future[Response]
@@ -78,18 +78,18 @@ object Requests extends Requests {
   def request(
     method: RequestMethod,
     url: URL,
-    params: Map[String, String] = Map.empty,
-    data: Option[String] = None,
-    json: Option[String] = None,
+    //params: Map[String, String] = Map.empty,
+    //data: Option[String] = None,
+    //json: Option[String] = None,
     headers: Map[String, Seq[String]] = Map.empty,
     cookies: Seq[Cookie] = Seq.empty,
-    files: Map[String, File] = Map.empty,
+    //files: Map[String, File] = Map.empty,
     //auth
-    timeout: Option[Int] = None,
-    allowRedirects: Boolean = true,
+    //timeout: Option[Int] = None,
+    allowRedirects: Boolean = true
     //proxies
     //verify
-    stream: Boolean = false
+    //stream: Boolean = false
     //cert
   )(implicit client: AsyncHttpClient = defaultClient): Future[Response] = {
 
