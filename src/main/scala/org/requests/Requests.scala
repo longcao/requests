@@ -112,7 +112,7 @@ case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
   def patch: Future[Response] = ???
   def delete: Future[Response] = ???
 
-  def codes: Map[String, Int] = ???
+  def codes: Map[String, Int] = Status.statusToCodes
 
   def close = client.close()
 }
