@@ -2,20 +2,9 @@ package org.requests
 
 import com.ning.http.client.cookie.{ Cookie => NingCookie }
 
-trait Cookie {
-  def domain: String
-  def expires: Option[Long]
-  def httpOnly: Boolean
-  def maxAge: Option[Int]
-  def name: Option[String]
-  def path: String
-  def secure: Boolean
-  def value: Option[String]
-}
-
 object Cookie {
   def apply(nc: NingCookie): Cookie = {
-    CookieImpl(
+    Cookie(
       domain = nc.getDomain,
       expires = if (nc.getExpires == -1) None else Some(nc.getExpires),
       httpOnly = nc.isHttpOnly,
@@ -48,7 +37,7 @@ object Cookie {
   }
 }
 
-case class CookieImpl(
+case class Cookie(
   domain: String,
   expires: Option[Long],
   httpOnly: Boolean,
@@ -56,4 +45,4 @@ case class CookieImpl(
   name: Option[String],
   path: String,
   secure: Boolean,
-  value: Option[String]) extends Cookie
+  value: Option[String])

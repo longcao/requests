@@ -8,7 +8,7 @@ object Main extends App {
 
   val headers = Map("Accept-Language" -> Seq("en-US"))
   val cookies = Seq(
-    CookieImpl(
+    Cookie(
       domain = "asdf",
       expires = None,
       httpOnly = true,
@@ -17,7 +17,7 @@ object Main extends App {
       path = "/",
       secure = false,
       value = Some("value")),
-    CookieImpl(
+    Cookie(
       domain = "asdf",
       expires = None,
       httpOnly = true,
