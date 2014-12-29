@@ -27,7 +27,12 @@ object Main extends App {
       secure = false,
       value = Some("value2")))
 
-  val r = Await.result(Requests.get(url, cookies = cookies, headers = headers), 2.seconds)
+  val requests = new Requests()
+
+  val r = Await.result(requests.get(url, cookies = cookies, headers = headers), 2.seconds)
   println(r)
+
+  // close the underlying client
+  requests.close
   System.exit(0)
 }

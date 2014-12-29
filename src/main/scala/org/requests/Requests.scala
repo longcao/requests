@@ -15,67 +15,11 @@ import java.net.URL
 import scala.concurrent.{ Future, Promise }
 import scala.collection.JavaConverters.{ mapAsJavaMapConverter, seqAsJavaListConverter }
 
-sealed trait Requests {
-  protected implicit lazy val defaultClient: AsyncHttpClient = new AsyncHttpClient()
-
-  def request(
-    method: RequestMethod,
-    url: URL,
-    params: Map[String, String] = Map.empty,
-    //data: Option[String] = None,
-    //json: Option[String] = None,
-    headers: Map[String, Seq[String]] = Map.empty,
-    cookies: Seq[Cookie] = Seq.empty,
-    //files: Map[String, File] = Map.empty,
-    //auth
-    //timeout: Option[Int] = None,
-    allowRedirects: Boolean = true
-    //proxies
-    //verify
-    //stream: Boolean = false
-    //cert
-  )(implicit client: AsyncHttpClient = defaultClient): Future[Response]
-
-  def get(
-    url: URL,
-    params: Map[String, String] = Map.empty,
-    //data: Option[String] = None,
-    //json: Option[String] = None,
-    headers: Map[String, Seq[String]] = Map.empty,
-    cookies: Seq[Cookie] = Seq.empty,
-    //files: Map[String, File] = Map.empty,
-    //auth
-    //timeout: Option[Int] = None,
-    allowRedirects: Boolean = true
-    //proxies
-    //verify
-    //stream: Boolean = false
-    //cert
-  )(implicit client: AsyncHttpClient = defaultClient): Future[Response] = {
-    request(
-      method = RequestMethod.GET,
-      url = url,
-      //params = params,
-      //data = data,
-      //json = json,
-      headers = headers,
-      cookies = cookies,
-      //files = files,
-      //timeout = timeout)
-      allowRedirects = allowRedirects)(client)
-      //stream = stream)
-  }
-
-  def head: Future[Response]
-  def post: Future[Response]
-  def put: Future[Response]
-  def patch: Future[Response]
-  def delete: Future[Response]
-
-  def codes: Map[String, Int]
+object Requests {
+  lazy val defaultClient: AsyncHttpClient = new AsyncHttpClient()
 }
 
-object Requests extends Requests {
+case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
   def request(
     method: RequestMethod,
     url: URL,
@@ -92,7 +36,7 @@ object Requests extends Requests {
     //verify
     //stream: Boolean = false
     //cert
-  )(implicit client: AsyncHttpClient = defaultClient): Future[Response] = {
+  ): Future[Response] = {
 
     val nsHeaders: FluentCaseInsensitiveStringsMap = {
       val hs = (headers ++ Cookie.cookiesToHeader(cookies))
@@ -132,6 +76,36 @@ object Requests extends Requests {
     result.future
   }
 
+  def get(
+    url: URL,
+    params: Map[String, String] = Map.empty,
+    //data: Option[String] = None,
+    //json: Option[String] = None,
+    headers: Map[String, Seq[String]] = Map.empty,
+    cookies: Seq[Cookie] = Seq.empty,
+    //files: Map[String, File] = Map.empty,
+    //auth
+    //timeout: Option[Int] = None,
+    allowRedirects: Boolean = true
+    //proxies
+    //verify
+    //stream: Boolean = false
+    //cert
+  ): Future[Response] = {
+    request(
+      method = RequestMethod.GET,
+      url = url,
+      //params = params,
+      //data = data,
+      //json = json,
+      headers = headers,
+      cookies = cookies,
+      //files = files,
+      //timeout = timeout)
+      allowRedirects = allowRedirects)
+      //stream = stream)
+  }
+
   def head: Future[Response] = ???
   def post: Future[Response] = ???
   def put: Future[Response] = ???
@@ -139,4 +113,6 @@ object Requests extends Requests {
   def delete: Future[Response] = ???
 
   def codes: Map[String, Int] = ???
+
+  def close = client.close()
 }
