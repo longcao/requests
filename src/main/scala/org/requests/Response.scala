@@ -5,28 +5,6 @@ import com.ning.http.client.{ Response => NingResponse }
 import scala.collection.immutable.Seq
 import scala.collection.JavaConverters._
 
-trait Response {
-  def apparentEncoding: String
-  def content: Array[Byte]
-  def cookies: Seq[Cookie]
-  def elasped: Long
-  def encoding: String
-  def headers: Map[String, Seq[String]]
-  def history: Seq[Response]
-  def isPermanentRedirect: Boolean
-  def isRedirect: Boolean
-  //def iterContent
-  //def iterLines
-  def json: String
-  //def links
-  //def raw
-  def reason: String
-  //def request
-  def statusCode: Int
-  def text: String
-  def url: String
-}
-
 object Response {
   def apply(nr: NingResponse): Response = {
     val headers: Map[String, Seq[String]] =
@@ -34,7 +12,7 @@ object Response {
         .map { case (k ,v) => k -> v.asScala.to[Seq] }
         .toMap
 
-    ResponseImpl(
+    Response(
       content = nr.getResponseBodyAsBytes,
       cookies = nr.getCookies.asScala.to[Seq].map(Cookie(_)),
       headers = headers,
@@ -46,7 +24,7 @@ object Response {
   }
 }
 
-case class ResponseImpl(
+case class Response(
   content: Array[Byte],
   cookies: Seq[Cookie] = Seq.empty,
   elasped: Long = 0L,
@@ -61,7 +39,7 @@ case class ResponseImpl(
   reason: String,
   //request,
   statusCode: Int,
-  url: String) extends Response {
+  url: String) {
 
   lazy val apparentEncoding: String = "placeholder"
   // TODO: replace this with status code types
