@@ -29,6 +29,7 @@ object Status {
     304 -> NotModified,
     305 -> UseProxy,
     307 -> TemporaryRedirect,
+    308 -> PermanentRedirect,
     400 -> BadRequest,
     401 -> Unauthorized,
     402 -> PaymentRequired,
@@ -140,6 +141,11 @@ case object UseProxy extends Status {
 case object TemporaryRedirect extends Status {
   val code = 307
   val reason: String = "Temporary Redirect"
+}
+
+case object PermanentRedirect extends Status {
+  val code = 308
+  val reason: String = "Permanent Redirect"
 }
 
 case object BadRequest extends Status {

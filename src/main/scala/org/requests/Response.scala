@@ -18,7 +18,7 @@ object Response {
       headers = headers,
       isRedirect = nr.isRedirected,
       reason = nr.getStatusText,
-      statusCode = nr.getStatusCode,
+      statusCode = Status.codesToStatus(nr.getStatusCode), // this isn't completely safe yet, will throw exceptions if an unknown status code
       url = nr.getUri.toString
     )
   }
@@ -38,12 +38,13 @@ case class Response(
   //raw,
   reason: String,
   //request,
-  statusCode: Int,
+  statusCode: Status,
   url: String) {
 
   lazy val apparentEncoding: String = "placeholder"
   // TODO: replace this with status code types
-  lazy val isPermanentRedirect: Boolean = statusCode == 301 || statusCode == 308
+  lazy val isPermanentRedirect: Boolean = statusCode == MovedPermanently || statusCode == PermanentRedirect
+
   lazy val json: String = "placeholder"
   lazy val text: String = "placeholder"
 }
