@@ -14,7 +14,7 @@ object Response {
         .map { case (k ,v) => k -> v.asScala.to[Seq] }
         .toMap
 
-    val statusCode: Status = Try(Status.codesToStatus(nr.getStatusCode)) match {
+    val status: Status = Try(Status.codesToStatus(nr.getStatusCode)) match {
       case Success(status) => status
       case Failure(ex) => Unknown(nr.getStatusCode, nr.getStatusText)
     }
@@ -24,8 +24,7 @@ object Response {
       cookies = nr.getCookies.asScala.to[Seq].map(Cookie(_)),
       headers = headers,
       isRedirect = nr.isRedirected,
-      reason = nr.getStatusText,
-      statusCode = statusCode,
+      status= status,
       url = nr.getUri.toString
     )
   }
@@ -43,15 +42,17 @@ case class Response(
   //iterLines,
   //links,
   //raw,
-  reason: String,
   //request,
-  statusCode: Status,
+  status: Status,
   url: String) {
 
   lazy val apparentEncoding: String = "placeholder"
-  lazy val isPermanentRedirect: Boolean = statusCode == MovedPermanently || statusCode == PermanentRedirect
+  lazy val isPermanentRedirect: Boolean = status == MovedPermanently || status == PermanentRedirect
 
   lazy val json: String = "placeholder"
   lazy val text: String = "placeholder"
+
+  lazy val reason = status.reason
+  lazy val statusCode = status.code
 }
 
