@@ -63,6 +63,8 @@ object Status {
     codesToStatus.map { case (code, status) => status.reason -> code }
 }
 
+case class Unknown(code: Int, reason: String) extends Status
+
 case object Continue extends Status {
   val code = 100
   val reason: String = "Continue"

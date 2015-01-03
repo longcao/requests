@@ -5,6 +5,8 @@ import com.ning.http.client.{ Response => NingResponse }
 import scala.collection.immutable.Seq
 import scala.collection.JavaConverters._
 
+import scala.util.{ Failure, Success, Try }
+
 object Response {
   def apply(nr: NingResponse): Response = {
     val headers: Map[String, Seq[String]] =
@@ -12,13 +14,18 @@ object Response {
         .map { case (k ,v) => k -> v.asScala.to[Seq] }
         .toMap
 
+    val statusCode: Status = Try(Status.codesToStatus(nr.getStatusCode)) match {
+      case Success(status) => status
+      case Failure(ex) => Unknown(nr.getStatusCode, nr.getStatusText)
+    }
+
     Response(
       content = nr.getResponseBodyAsBytes,
       cookies = nr.getCookies.asScala.to[Seq].map(Cookie(_)),
       headers = headers,
       isRedirect = nr.isRedirected,
       reason = nr.getStatusText,
-      statusCode = Status.codesToStatus(nr.getStatusCode), // this isn't completely safe yet, will throw exceptions if an unknown status code
+      statusCode = statusCode,
       url = nr.getUri.toString
     )
   }
@@ -42,7 +49,6 @@ case class Response(
   url: String) {
 
   lazy val apparentEncoding: String = "placeholder"
-  // TODO: replace this with status code types
   lazy val isPermanentRedirect: Boolean = statusCode == MovedPermanently || statusCode == PermanentRedirect
 
   lazy val json: String = "placeholder"
