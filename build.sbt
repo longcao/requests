@@ -9,5 +9,6 @@ scalacOptions ++= Seq("-deprecation", "-feature")
 fork in run := true
 
 libraryDependencies ++= Seq(
-  "com.ning" % "async-http-client" % "1.9.3"
+  "com.ning" % "async-http-client" % "1.9.3",
+  "org.scalatest" %% "scalatest" % "2.2.1" % "test"
 )
