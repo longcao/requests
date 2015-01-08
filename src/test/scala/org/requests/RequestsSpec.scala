@@ -16,7 +16,7 @@ class ExampleSpec extends FlatSpec
     val result = requests.get(getUrl)
 
     whenReady(result) { r =>
-      r.status should === (org.requests.OK)
+      r.status should === (org.requests.status.OK)
     }
 
     requests.close

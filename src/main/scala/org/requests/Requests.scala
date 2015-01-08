@@ -12,6 +12,8 @@ import com.ning.http.client.{
 import java.io.File
 import java.net.URL
 
+import org.requests.status.Status
+
 import scala.concurrent.{ Future, Promise }
 import scala.collection.JavaConverters.{ mapAsJavaMapConverter, seqAsJavaListConverter }
 

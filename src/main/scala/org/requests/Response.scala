@@ -2,6 +2,8 @@ package org.requests
 
 import com.ning.http.client.{ Response => NingResponse }
 
+import org.requests.status._
+
 import scala.collection.immutable.Seq
 import scala.collection.JavaConverters._
 

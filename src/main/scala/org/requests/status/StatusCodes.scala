@@ -1,4 +1,4 @@
-package org.requests
+package org.requests.status
 
 import scala.annotation.switch
 
