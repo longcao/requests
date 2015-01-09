@@ -18,7 +18,7 @@ import scala.concurrent.{ Future, Promise }
 import scala.collection.JavaConverters.{ mapAsJavaMapConverter, seqAsJavaListConverter }
 
 object Requests {
-  lazy val defaultClient: AsyncHttpClient = new AsyncHttpClient()
+  def defaultClient: AsyncHttpClient = new AsyncHttpClient()
 }
 
 case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
