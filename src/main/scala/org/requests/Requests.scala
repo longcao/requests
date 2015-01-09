@@ -26,7 +26,7 @@ case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
     method: RequestMethod,
     url: URL,
     params: Map[String, String] = Map.empty,
-    //data: Option[String] = None,
+    data: Array[Byte] = Array.empty,
     //json: Option[String] = None,
     headers: Map[String, Seq[String]] = Map.empty,
     cookies: Seq[Cookie] = Seq.empty,
@@ -59,6 +59,7 @@ case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
       .setFollowRedirects(allowRedirects)
       .setHeaders(nsHeaders)
       .setQueryParams(queryParams)
+      .setBody(data)
 
     val result = Promise[Response]()
 
@@ -81,7 +82,7 @@ case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
   def get(
     url: URL,
     params: Map[String, String] = Map.empty,
-    //data: Option[String] = None,
+    data: Array[Byte] = Array.empty,
     //json: Option[String] = None,
     headers: Map[String, Seq[String]] = Map.empty,
     cookies: Seq[Cookie] = Seq.empty,
@@ -98,7 +99,7 @@ case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
       method = RequestMethod.GET,
       url = url,
       params = params,
-      //data = data,
+      data = data,
       //json = json,
       headers = headers,
       cookies = cookies,

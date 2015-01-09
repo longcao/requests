@@ -9,11 +9,13 @@ class ExampleSpec extends FlatSpec
   with ScalaFutures
   with TypeCheckedTripleEquals {
 
-  val getUrl = new java.net.URL("http://httpbin.org/status/200")
+  val getUrl = new java.net.URL("http://httpbin.org/get")
 
   s"""Requests.get("${getUrl.toString}")""" should "return a 200" in {
     val requests = new Requests()
-    val result = requests.get(getUrl)
+    val result = requests.get(
+      url = getUrl,
+      data = "hello".getBytes)
 
     whenReady(result) { r =>
       r.status should === (org.requests.status.OK)
