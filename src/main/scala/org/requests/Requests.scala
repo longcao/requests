@@ -27,7 +27,7 @@ case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
     url: URL,
     params: Map[String, String] = Map.empty,
     data: Array[Byte] = Array.empty,
-    //json: Option[String] = None,
+    json: Option[Json] = None,
     headers: Map[String, Seq[String]] = Map.empty,
     cookies: Seq[Cookie] = Seq.empty,
     //files: Map[String, File] = Map.empty,
@@ -53,13 +53,22 @@ case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
         new NingParam(name, value)
       }.asJava
 
+    // priority: data > json
+    val body: Array[Byte] = if (data.nonEmpty) {
+      data
+    } else if (json.nonEmpty) {
+      json.get.getBytes
+    } else {
+      data
+    }
+
     // configure the request
     val requestBuilder = new RequestBuilder(method.toString)
       .setUrl(url.toString)
       .setFollowRedirects(allowRedirects)
       .setHeaders(nsHeaders)
       .setQueryParams(queryParams)
-      .setBody(data)
+      .setBody(body)
 
     val result = Promise[Response]()
 
@@ -83,7 +92,7 @@ case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
     url: URL,
     params: Map[String, String] = Map.empty,
     data: Array[Byte] = Array.empty,
-    //json: Option[String] = None,
+    json: Option[Json] = None,
     headers: Map[String, Seq[String]] = Map.empty,
     cookies: Seq[Cookie] = Seq.empty,
     //files: Map[String, File] = Map.empty,
@@ -100,7 +109,7 @@ case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
       url = url,
       params = params,
       data = data,
-      //json = json,
+      json = json,
       headers = headers,
       cookies = cookies,
       //files = files,
