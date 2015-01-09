@@ -97,7 +97,7 @@ case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
     request(
       method = RequestMethod.GET,
       url = url,
-      //params = params,
+      params = params,
       //data = data,
       //json = json,
       headers = headers,
