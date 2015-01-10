@@ -32,7 +32,7 @@ case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
     cookies: Seq[Cookie] = Seq.empty,
     //files: Map[String, File] = Map.empty,
     //auth
-    //timeout: Option[Int] = None,
+    timeout: Option[Int] = None,
     allowRedirects: Boolean = true
     //proxies
     //verify
@@ -69,6 +69,7 @@ case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
       .setHeaders(nsHeaders)
       .setQueryParams(queryParams)
       .setBody(body)
+      .setRequestTimeout(timeout.getOrElse(0)) // default to 0, falls back to client config
 
     val result = Promise[Response]()
 
@@ -97,7 +98,7 @@ case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
     cookies: Seq[Cookie] = Seq.empty,
     //files: Map[String, File] = Map.empty,
     //auth
-    //timeout: Option[Int] = None,
+    timeout: Option[Int] = None,
     allowRedirects: Boolean = true
     //proxies
     //verify
@@ -113,7 +114,7 @@ case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
       headers = headers,
       cookies = cookies,
       //files = files,
-      //timeout = timeout)
+      timeout = timeout,
       allowRedirects = allowRedirects)
       //stream = stream)
   }
