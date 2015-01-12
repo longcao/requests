@@ -9,7 +9,6 @@ import com.ning.http.client.{
   RequestBuilder
 }
 
-import java.io.File
 import java.net.URL
 
 import org.requests.status.Status
@@ -30,7 +29,7 @@ case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
     json: Option[Json] = None,
     headers: Map[String, Seq[String]] = Map.empty,
     cookies: Seq[Cookie] = Seq.empty,
-    //files: Map[String, File] = Map.empty,
+    files: Map[String, BodyPart] = Map.empty,
     //auth
     timeout: Option[Int] = None,
     allowRedirects: Boolean = true
@@ -53,28 +52,32 @@ case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
         new NingParam(name, value)
       }.asJava
 
-    // priority: data > json
-    val body: Array[Byte] = if (data.nonEmpty) {
-      data
-    } else if (json.nonEmpty) {
-      json.get.getBytes
-    } else {
-      data
-    }
-
     // configure the request
     val requestBuilder = new RequestBuilder(method.toString)
       .setUrl(url.toString)
       .setFollowRedirects(allowRedirects)
       .setHeaders(nsHeaders)
       .setQueryParams(queryParams)
-      .setBody(body)
       .setRequestTimeout(timeout.getOrElse(0)) // default to 0, falls back to client config
+
+    // priority: data > json > files
+    val requestBuilderWithBody: RequestBuilder = if (data.nonEmpty) {
+      requestBuilder.setBody(data)
+    } else if (json.nonEmpty) {
+      requestBuilder.setBody(json.get)
+    } else if (files.nonEmpty) {
+      files.foldLeft(requestBuilder) { case (rb, (name, bodyPart)) =>
+        val part = bodyPart.toPart(name)
+        rb.addBodyPart(part)
+      }
+    } else {
+      requestBuilder
+    }
 
     val result = Promise[Response]()
 
     client.executeRequest(
-      requestBuilder.build(),
+      requestBuilderWithBody.build(),
       new AsyncCompletionHandler[NingResponse]() {
         override def onCompleted(ningResponse: NingResponse): NingResponse = {
           result.success(Response(ningResponse))
@@ -96,7 +99,7 @@ case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
     json: Option[Json] = None,
     headers: Map[String, Seq[String]] = Map.empty,
     cookies: Seq[Cookie] = Seq.empty,
-    //files: Map[String, File] = Map.empty,
+    files: Map[String, BodyPart] = Map.empty,
     //auth
     timeout: Option[Int] = None,
     allowRedirects: Boolean = true
@@ -113,7 +116,7 @@ case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
       json = json,
       headers = headers,
       cookies = cookies,
-      //files = files,
+      files = files,
       timeout = timeout,
       allowRedirects = allowRedirects)
       //stream = stream)
