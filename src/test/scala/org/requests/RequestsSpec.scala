@@ -30,7 +30,6 @@ class ExampleSpec extends FlatSpec
     val result = requests.get(url = utf8)
 
     whenReady(result) { r =>
-      println(r.apparentEncoding)
       r.apparentEncoding should === (Some("UTF-8"))
     }
 
