@@ -5,7 +5,7 @@ import com.ning.http.client.multipart.{ ByteArrayPart, FilePart, Part, StringPar
 import java.io.File
 import java.nio.charset.Charset
 
-trait BodyPart {
+sealed trait BodyPart {
   def toPart(name: String): Part
 }
 
