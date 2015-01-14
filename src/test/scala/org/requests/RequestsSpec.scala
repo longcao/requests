@@ -15,7 +15,7 @@ class ExampleSpec extends FlatSpec
     val requests = new Requests()
     val result = requests.get(
       url = getUrl,
-      data = "hello".getBytes)
+      data = ByteArrayData("hello".getBytes))
 
     whenReady(result) { r =>
       r.status should === (org.requests.status.OK)
