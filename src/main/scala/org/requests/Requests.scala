@@ -29,7 +29,7 @@ case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
     json: Option[Json] = None,
     headers: Map[String, Seq[String]] = Map.empty,
     cookies: Seq[Cookie] = Seq.empty,
-    files: Map[String, BodyPart] = Map.empty,
+    files: List[BodyPart] = List.empty,
     //auth
     timeout: Option[Int] = None,
     allowRedirects: Boolean = true
@@ -66,9 +66,8 @@ case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
     } else if (json.nonEmpty) {
       requestBuilder.setBody(json.get)
     } else if (files.nonEmpty) {
-      files.foldLeft(requestBuilder) { case (rb, (name, bodyPart)) =>
-        val part = bodyPart.toPart(name)
-        rb.addBodyPart(part)
+      files.foldLeft(requestBuilder) { case (rb, bodyPart) =>
+        rb.addBodyPart(bodyPart.toPart)
       }
     } else {
       requestBuilder
@@ -99,7 +98,7 @@ case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
     json: Option[Json] = None,
     headers: Map[String, Seq[String]] = Map.empty,
     cookies: Seq[Cookie] = Seq.empty,
-    files: Map[String, BodyPart] = Map.empty,
+    files: List[BodyPart] = List.empty,
     //auth
     timeout: Option[Int] = None,
     allowRedirects: Boolean = true
