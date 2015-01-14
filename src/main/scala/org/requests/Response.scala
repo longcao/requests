@@ -2,6 +2,7 @@ package org.requests
 
 import com.ning.http.client.{ Response => NingResponse }
 
+import org.requests.chardet.Chardet
 import org.requests.status._
 
 import scala.collection.immutable.Seq
@@ -48,7 +49,7 @@ case class Response(
   status: Status,
   url: String) {
 
-  lazy val apparentEncoding: String = "placeholder"
+  lazy val apparentEncoding: Option[String] = Chardet.detectEncoding(content)
   lazy val isPermanentRedirect: Boolean = status == MovedPermanently || status == PermanentRedirect
 
   lazy val json: String = "placeholder"

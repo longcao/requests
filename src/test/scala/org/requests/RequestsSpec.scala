@@ -10,6 +10,7 @@ class ExampleSpec extends FlatSpec
   with TypeCheckedTripleEquals {
 
   val getUrl = new java.net.URL("http://httpbin.org/get")
+  val utf8 = new java.net.URL("http://httpbin.org/encoding/utf8")
 
   s"""Requests.get("${getUrl.toString}")""" should "return a 200" in {
     val requests = new Requests()
@@ -19,6 +20,18 @@ class ExampleSpec extends FlatSpec
 
     whenReady(result) { r =>
       r.status should === (org.requests.status.OK)
+    }
+
+    requests.close
+  }
+
+  s"""Requests.get("${utf8.toString}")""" should "return the correct encoding" in {
+    val requests = new Requests()
+    val result = requests.get(url = utf8)
+
+    whenReady(result) { r =>
+      println(r.apparentEncoding)
+      r.apparentEncoding should === (Some("UTF-8"))
     }
 
     requests.close
