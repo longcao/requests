@@ -25,11 +25,9 @@ case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
     method: RequestMethod,
     url: URL,
     params: Map[String, String] = Map.empty,
-    data: Array[Byte] = Array.empty,
-    json: Option[Json] = None,
+    data: Data = EmptyData,
     headers: Map[String, Seq[String]] = Map.empty,
     cookies: Seq[Cookie] = Seq.empty,
-    files: List[BodyPart] = List.empty,
     //auth
     timeout: Option[Int] = None,
     allowRedirects: Boolean = true
@@ -60,17 +58,18 @@ case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
       .setQueryParams(queryParams)
       .setRequestTimeout(timeout.getOrElse(0)) // default to 0, falls back to client config
 
-    // priority: data > json > files
-    val requestBuilderWithBody: RequestBuilder = if (data.nonEmpty) {
-      requestBuilder.setBody(data)
-    } else if (json.nonEmpty) {
-      requestBuilder.setBody(json.get)
-    } else if (files.nonEmpty) {
-      files.foldLeft(requestBuilder) { case (rb, bodyPart) =>
-        rb.addBodyPart(bodyPart.toPart)
-      }
-    } else {
-      requestBuilder
+    val requestBuilderWithBody: RequestBuilder = data match {
+      case EmptyData => requestBuilder
+      case ByteArrayData(ba) => requestBuilder.setBody(ba)
+      case StringData(s) => requestBuilder.setBody(s)
+      case FormData(formValues) =>
+        formValues.foldLeft(requestBuilder) { case (rb, (name, value)) =>
+          rb.addFormParam(name, value)
+        }
+      case MultipartData(bodyParts) =>
+        bodyParts.foldLeft(requestBuilder) { case (rb, bp) =>
+          rb.addBodyPart(bp.toPart)
+        }
     }
 
     val result = Promise[Response]()
@@ -94,11 +93,9 @@ case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
   def get(
     url: URL,
     params: Map[String, String] = Map.empty,
-    data: Array[Byte] = Array.empty,
-    json: Option[Json] = None,
+    data: Data = EmptyData,
     headers: Map[String, Seq[String]] = Map.empty,
     cookies: Seq[Cookie] = Seq.empty,
-    files: List[BodyPart] = List.empty,
     //auth
     timeout: Option[Int] = None,
     allowRedirects: Boolean = true
@@ -112,10 +109,8 @@ case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
       url = url,
       params = params,
       data = data,
-      json = json,
       headers = headers,
       cookies = cookies,
-      files = files,
       timeout = timeout,
       allowRedirects = allowRedirects)
       //stream = stream)
