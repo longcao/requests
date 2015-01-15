@@ -2,12 +2,13 @@ package org.requests
 
 import com.ning.http.client.{ Response => NingResponse }
 
+import java.nio.charset.Charset
+
 import org.requests.chardet.Chardet
 import org.requests.status._
 
 import scala.collection.immutable.Seq
 import scala.collection.JavaConverters._
-
 import scala.util.{ Failure, Success, Try }
 
 object Response {
@@ -37,7 +38,6 @@ case class Response(
   content: Array[Byte],
   cookies: Seq[Cookie] = Seq.empty,
   elasped: Long = 0L,
-  encoding: String = "placeholder",
   headers: Map[String, Seq[String]] = Map.empty,
   history: Seq[Response] = Seq.empty,
   isRedirect: Boolean,
@@ -53,7 +53,7 @@ case class Response(
   lazy val isPermanentRedirect: Boolean = status == MovedPermanently || status == PermanentRedirect
 
   lazy val json: String = "placeholder"
-  lazy val text: String = "placeholder"
+  def text(encoding: Charset): String = new String(content, encoding)
 
   lazy val reason = status.reason
   lazy val statusCode = status.code
