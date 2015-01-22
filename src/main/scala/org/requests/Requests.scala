@@ -5,6 +5,7 @@ import com.ning.http.client.{
   AsyncCompletionHandler,
   FluentCaseInsensitiveStringsMap,
   Param => NingParam,
+  ProxyServer,
   Response => NingResponse,
   RequestBuilder
 }
@@ -30,8 +31,8 @@ case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
     cookies: Seq[Cookie] = Seq.empty,
     //auth
     timeout: Option[Int] = None,
-    allowRedirects: Boolean = true
-    //proxies
+    allowRedirects: Boolean = true,
+    proxy: Option[ProxyServer] = None
     //verify
     //cert
   ): Future[Response] = {
@@ -56,6 +57,7 @@ case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
       .setHeaders(nsHeaders)
       .setQueryParams(queryParams)
       .setRequestTimeout(timeout.getOrElse(0)) // default to 0, falls back to client config
+      .setProxyServer(proxy.getOrElse(null))
 
     val requestBuilderWithBody: RequestBuilder = data match {
       case EmptyData => requestBuilder
@@ -97,8 +99,8 @@ case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
     cookies: Seq[Cookie] = Seq.empty,
     //auth
     timeout: Option[Int] = None,
-    allowRedirects: Boolean = true
-    //proxies
+    allowRedirects: Boolean = true,
+    proxy: Option[ProxyServer] = None
     //verify
     //cert
   ): Future[Response] = {
@@ -110,7 +112,8 @@ case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
       headers = headers,
       cookies = cookies,
       timeout = timeout,
-      allowRedirects = allowRedirects)
+      allowRedirects = allowRedirects,
+      proxy = proxy)
   }
 
   def head: Future[Response] = ???
