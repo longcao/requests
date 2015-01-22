@@ -54,7 +54,29 @@ case class Response(
   status: Status,
   url: String) {
 
-  lazy val apparentEncoding: Option[String] = Chardet.detectEncoding(content)
+  private def parseCharset(ct: String): Option[Charset] = {
+    ct.split(";")
+      .map(_.trim)
+      .filter(_.startsWith("charset="))
+      .map(_.stripPrefix("charset="))
+      .headOption
+      .flatMap { nameToCharset(_) }
+  }
+
+  private def nameToCharset(name: String): Option[Charset] = Try(Charset.forName(name)).toOption
+
+  /**
+   * Attempts to get the charset from the 'Content-Type' header if available,
+   * then attempts to detect the charset from the content bytes.
+   */
+  lazy val apparentEncoding: Option[Charset] = {
+    headers.get("Content-Type")
+      .flatMap(_.headOption match {
+        case Some(v) => parseCharset(v)
+        case _ => Chardet.detectEncoding(content).flatMap(nameToCharset(_))
+      })
+  }
+
   lazy val isPermanentRedirect: Boolean = status == MovedPermanently || status == PermanentRedirect
 
   lazy val json: String = "placeholder"

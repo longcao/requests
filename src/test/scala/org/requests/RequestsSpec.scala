@@ -1,5 +1,7 @@
 package org.requests
 
+import java.nio.charset.StandardCharsets.UTF_8
+
 import org.scalactic.TypeCheckedTripleEquals
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.concurrent.ScalaFutures._
@@ -34,7 +36,7 @@ class RequestsSpec extends FlatSpec
     val result = requests.get(url = utf8)
 
     whenReady(result) { r =>
-      r.apparentEncoding should === (Some("UTF-8"))
+      r.apparentEncoding should === (Some(UTF_8))
     }
 
     requests.close
