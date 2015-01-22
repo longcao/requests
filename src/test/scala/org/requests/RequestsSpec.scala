@@ -16,6 +16,7 @@ class RequestsSpec extends FlatSpec
   implicit val defaultPatience = PatienceConfig(timeout = Span(2, Seconds), interval = Span(100, Millis))
 
   val getUrl = new java.net.URL("http://httpbin.org/get")
+  val failUrl = new java.net.URL("https://kennethreitz.org/")
   val utf8 = new java.net.URL("http://httpbin.org/encoding/utf8")
 
   s"""Requests.get("${getUrl.toString}")""" should "return a 200" in {
@@ -37,6 +38,17 @@ class RequestsSpec extends FlatSpec
 
     whenReady(result) { r =>
       r.apparentEncoding should === (Some(UTF_8))
+    }
+
+    requests.close
+  }
+
+  s"""Requests.get("${failUrl.toString}")""" should "contain a HostnameVerifier exception" in {
+    val requests = new Requests()
+    val result = requests.get(url = failUrl)
+
+    whenReady(result.failed) { r =>
+      r shouldBe a [java.net.ConnectException]
     }
 
     requests.close
