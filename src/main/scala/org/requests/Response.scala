@@ -7,16 +7,21 @@ import java.nio.charset.Charset
 import org.requests.chardet.Chardet
 import org.requests.status._
 
-import scala.collection.immutable.Seq
+import scala.collection.immutable.{ Seq, TreeMap }
 import scala.collection.JavaConverters._
 import scala.util.{ Failure, Success, Try }
 
 object Response {
   def apply(nr: NingResponse): Response = {
-    val headers: Map[String, Seq[String]] =
-      mapAsScalaMapConverter(nr.getHeaders).asScala
+    val headers: Map[String, Seq[String]] = {
+      val hs = mapAsScalaMapConverter(nr.getHeaders).asScala
+        .toSeq
         .map { case (k ,v) => k -> v.asScala.to[Seq] }
-        .toMap
+
+      TreeMap(hs: _*)(new Ordering[String] {
+        def compare(x: String, y: String): Int = x.compareToIgnoreCase(y)
+      })
+    }
 
     val status: Status = Try(Status.codesToStatus(nr.getStatusCode)) match {
       case Success(status) => status
