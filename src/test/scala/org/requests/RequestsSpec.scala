@@ -6,7 +6,7 @@ import org.scalatest.concurrent.ScalaFutures._
 import org.scalatest.time.{ Millis, Span, Seconds }
 import org.scalatest.{ FlatSpec, Matchers }
 
-class ExampleSpec extends FlatSpec
+class RequestsSpec extends FlatSpec
   with Matchers
   with ScalaFutures
   with TypeCheckedTripleEquals {
