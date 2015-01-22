@@ -33,7 +33,6 @@ case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
     allowRedirects: Boolean = true
     //proxies
     //verify
-    //stream: Boolean = false
     //cert
   ): Future[Response] = {
 
@@ -101,7 +100,6 @@ case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
     allowRedirects: Boolean = true
     //proxies
     //verify
-    //stream: Boolean = false
     //cert
   ): Future[Response] = {
     request(
@@ -113,7 +111,6 @@ case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
       cookies = cookies,
       timeout = timeout,
       allowRedirects = allowRedirects)
-      //stream = stream)
   }
 
   def head: Future[Response] = ???
