@@ -2,6 +2,8 @@ package org.requests
 
 import com.ning.http.client.{
   AsyncHttpClient,
+  AsyncHttpClientConfig,
+  AsyncHttpClientConfigDefaults,
   AsyncCompletionHandler,
   FluentCaseInsensitiveStringsMap,
   Param => NingParam,
@@ -18,10 +20,17 @@ import scala.concurrent.{ Future, Promise }
 import scala.collection.JavaConverters.{ mapAsJavaMapConverter, seqAsJavaListConverter }
 
 object Requests {
-  def defaultClient: AsyncHttpClient = new AsyncHttpClient()
+  def apply(
+    verify: Boolean = AsyncHttpClientConfigDefaults.defaultAcceptAnyCertificate
+  ): Requests = {
+    val config = new AsyncHttpClientConfig.Builder()
+      .setAcceptAnyCertificate(verify)
+
+    new Requests(new AsyncHttpClient(config.build))
+  }
 }
 
-case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
+case class Requests(client: AsyncHttpClient) {
   def request(
     method: RequestMethod,
     url: URL,
@@ -33,7 +42,6 @@ case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
     timeout: Option[Int] = None,
     allowRedirects: Boolean = true,
     proxy: Option[ProxyServer] = None
-    //verify
     //cert
   ): Future[Response] = {
 
@@ -101,7 +109,6 @@ case class Requests(client: AsyncHttpClient = Requests.defaultClient) {
     timeout: Option[Int] = None,
     allowRedirects: Boolean = true,
     proxy: Option[ProxyServer] = None
-    //verify
     //cert
   ): Future[Response] = {
     request(

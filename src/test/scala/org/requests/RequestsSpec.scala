@@ -20,7 +20,7 @@ class RequestsSpec extends FlatSpec
   val utf8 = new java.net.URL("http://httpbin.org/encoding/utf8")
 
   s"""Requests.get("${getUrl.toString}")""" should "return a 200" in {
-    val requests = new Requests()
+    val requests = Requests()
     val result = requests.get(
       url = getUrl,
       data = ByteArrayData("hello".getBytes))
@@ -33,7 +33,7 @@ class RequestsSpec extends FlatSpec
   }
 
   s"""Requests.get("${utf8.toString}")""" should "return the correct encoding" in {
-    val requests = new Requests()
+    val requests = Requests()
     val result = requests.get(url = utf8)
 
     whenReady(result) { r =>
@@ -44,7 +44,7 @@ class RequestsSpec extends FlatSpec
   }
 
   s"""Requests.get("${failUrl.toString}")""" should "contain a HostnameVerifier exception" in {
-    val requests = new Requests()
+    val requests = Requests()
     val result = requests.get(url = failUrl)
 
     whenReady(result.failed) { r =>
