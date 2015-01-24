@@ -13,6 +13,7 @@ import com.ning.http.client.{
 }
 
 import java.net.URL
+import javax.net.ssl.SSLContext
 
 import org.requests.status.Status
 
@@ -21,10 +22,12 @@ import scala.collection.JavaConverters.{ mapAsJavaMapConverter, seqAsJavaListCon
 
 object Requests {
   def apply(
-    verify: Boolean = true
+    verify: Boolean = true,
+    sslContext: SSLContext = null
   ): Requests = {
     val config = new AsyncHttpClientConfig.Builder()
       .setAcceptAnyCertificate(!verify)
+      .setSSLContext(sslContext)
 
     new Requests(new AsyncHttpClient(config.build))
   }
