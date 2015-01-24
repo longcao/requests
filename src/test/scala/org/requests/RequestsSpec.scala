@@ -16,7 +16,7 @@ class RequestsSpec extends FlatSpec
   implicit val defaultPatience = PatienceConfig(timeout = Span(2, Seconds), interval = Span(100, Millis))
 
   val getUrl = new java.net.URL("http://httpbin.org/get")
-  val failUrl = new java.net.URL("https://kennethreitz.org/")
+  val expiredCertUrl = new java.net.URL("https://testssl-expire.disig.sk/index.en.html")
   val utf8 = new java.net.URL("http://httpbin.org/encoding/utf8")
 
   s"""Requests.get("${getUrl.toString}")""" should "return a 200" in {
@@ -43,12 +43,23 @@ class RequestsSpec extends FlatSpec
     requests.close
   }
 
-  s"""Requests.get("${failUrl.toString}")""" should "contain a HostnameVerifier exception" in {
+  s"""Requests.get("${expiredCertUrl.toString}")""" should "contain a ConnectException" in {
     val requests = Requests()
-    val result = requests.get(url = failUrl)
+    val result = requests.get(url = expiredCertUrl)
 
     whenReady(result.failed) { r =>
       r shouldBe a [java.net.ConnectException]
+    }
+
+    requests.close
+  }
+
+  s"""Requests.get("${expiredCertUrl.toString}"), verify = false""" should "return a 200" in {
+    val requests = Requests(verify = false)
+    val result = requests.get(url = expiredCertUrl)
+
+    whenReady(result) { r =>
+      r.status should === (org.requests.status.OK)
     }
 
     requests.close
