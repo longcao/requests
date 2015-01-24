@@ -45,7 +45,6 @@ case class Requests(client: AsyncHttpClient) {
     timeout: Option[Int] = None,
     allowRedirects: Boolean = true,
     proxy: Option[ProxyServer] = None
-    //cert
   ): Future[Response] = {
 
     val nsHeaders: FluentCaseInsensitiveStringsMap = {
@@ -112,7 +111,6 @@ case class Requests(client: AsyncHttpClient) {
     timeout: Option[Int] = None,
     allowRedirects: Boolean = true,
     proxy: Option[ProxyServer] = None
-    //cert
   ): Future[Response] = {
     request(
       method = RequestMethod.GET,
