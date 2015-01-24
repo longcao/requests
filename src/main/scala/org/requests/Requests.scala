@@ -21,7 +21,7 @@ import scala.collection.JavaConverters.{ mapAsJavaMapConverter, seqAsJavaListCon
 
 object Requests {
   def apply(
-    verify: Boolean = !AsyncHttpClientConfigDefaults.defaultAcceptAnyCertificate
+    verify: Boolean = true
   ): Requests = {
     val config = new AsyncHttpClientConfig.Builder()
       .setAcceptAnyCertificate(!verify)
