@@ -2,6 +2,8 @@ package org.requests
 
 import java.nio.charset.StandardCharsets.UTF_8
 
+import org.requests.Implicits._
+
 import org.scalactic.TypeCheckedTripleEquals
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.concurrent.ScalaFutures._
@@ -23,7 +25,7 @@ class RequestsSpec extends FlatSpec
     val requests = Requests()
     val result = requests.get(
       url = getUrl,
-      data = ByteArrayData("hello".getBytes))
+      data = "hello".getBytes)
 
     whenReady(result) { r =>
       r.status should === (org.requests.status.OK)
