@@ -41,7 +41,7 @@ case class Requests(client: AsyncHttpClient) {
     data: Data = EmptyData,
     headers: Map[String, Seq[String]] = Map.empty,
     cookies: Seq[Cookie] = Seq.empty,
-    //auth
+    auth: Option[Auth] = None,
     timeout: Option[Int] = None,
     allowRedirects: Boolean = true,
     proxy: Option[ProxyServer] = None
@@ -68,6 +68,7 @@ case class Requests(client: AsyncHttpClient) {
       .setQueryParams(queryParams)
       .setRequestTimeout(timeout.getOrElse(0)) // default to 0, falls back to client config
       .setProxyServer(proxy.getOrElse(null))
+      .setRealm(auth.map(_.toRealm).getOrElse(null))
 
     val requestBuilderWithBody: RequestBuilder = data match {
       case EmptyData => requestBuilder
@@ -107,7 +108,7 @@ case class Requests(client: AsyncHttpClient) {
     data: Data = EmptyData,
     headers: Map[String, Seq[String]] = Map.empty,
     cookies: Seq[Cookie] = Seq.empty,
-    //auth
+    auth: Option[Auth] = None,
     timeout: Option[Int] = None,
     allowRedirects: Boolean = true,
     proxy: Option[ProxyServer] = None
@@ -119,6 +120,7 @@ case class Requests(client: AsyncHttpClient) {
       data = data,
       headers = headers,
       cookies = cookies,
+      auth = auth,
       timeout = timeout,
       allowRedirects = allowRedirects,
       proxy = proxy)
