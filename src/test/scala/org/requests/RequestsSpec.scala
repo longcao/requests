@@ -37,7 +37,8 @@ class RequestsSpec extends FlatSpec
     val result = requests.get(url = utf8)
 
     whenReady(result) { r =>
-      r.apparentEncoding should === (Some(UTF_8))
+      r.apparentEncoding() should === (Some(UTF_8)) // read from Content-type header
+      r.apparentEncoding(true) should === (Some(UTF_8)) // Chardet
     }
 
     requests.close

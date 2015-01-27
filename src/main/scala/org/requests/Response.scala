@@ -69,12 +69,16 @@ case class Response(
    * Attempts to get the charset from the 'Content-Type' header if available,
    * then attempts to detect the charset from the content bytes.
    */
-  lazy val apparentEncoding: Option[Charset] = {
-    headers.get("Content-Type")
-      .flatMap(_.headOption match {
-        case Some(v) => parseCharset(v)
-        case _ => Chardet.detectEncoding(content).flatMap(nameToCharset(_))
-      })
+  def apparentEncoding(skipHeader: Boolean = false): Option[Charset] = {
+    if (skipHeader) {
+      Chardet.detectEncoding(content).flatMap(nameToCharset(_))
+    } else {
+      headers.get("Content-Type")
+        .flatMap(_.headOption match {
+          case Some(v) => parseCharset(v)
+          case _ => Chardet.detectEncoding(content).flatMap(nameToCharset(_))
+        })
+    }
   }
 
   lazy val isPermanentRedirect: Boolean = status == MovedPermanently || status == PermanentRedirect
