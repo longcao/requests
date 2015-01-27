@@ -7,8 +7,10 @@ import org.requests.Implicits._
 import org.scalactic.TypeCheckedTripleEquals
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.concurrent.ScalaFutures._
-import org.scalatest.time.{ Millis, Span, Seconds }
+import org.scalatest.time.{ Millis, Seconds, Span }
 import org.scalatest.{ FlatSpec, Matchers }
+
+import play.api.libs.json.Json
 
 class RequestsSpec extends FlatSpec
   with Matchers
@@ -21,11 +23,36 @@ class RequestsSpec extends FlatSpec
   val expiredCertUrl = new java.net.URL("https://testssl-expire.disig.sk/index.en.html")
   val utf8 = new java.net.URL("http://httpbin.org/encoding/utf8")
 
-  s"""Requests.get("${getUrl.toString}")""" should "return a 200" in {
+  s"""Requests.get("${getUrl.toString}")""" should "return the correct response" in {
     val requests = Requests()
-    val result = requests.get(url = getUrl)
+
+    val params = Map("k1" -> "v1", "k2" -> "v2")
+    val headers = Map("Test-Header" -> Seq("zxcv"))
+    val cookies = Seq(
+      Cookie(
+        domain = "httpbin.org",
+        expires = Some(5),
+        httpOnly = true,
+        maxAge = Some(10),
+        name = Some("hello"),
+        path = "/",
+        secure = false,
+        value = Some("value")))
+
+    val result = requests.get(
+      url = getUrl,
+      headers = headers,
+      cookies = cookies,
+      params = params)
 
     whenReady(result) { r =>
+      val data = Json.parse(r.content)
+      val args = (data \ "args").as[Map[String, String]]
+      val returnedHeaders = Map("Test-Header" -> Seq((data \ "headers" \ "Test-Header").as[String]))
+
+      r.headers.get("Content-Type") should === (Some(Vector("application/json")))
+      returnedHeaders should === (headers)
+      args should === (params)
       r.status should === (org.requests.status.OK)
     }
 
