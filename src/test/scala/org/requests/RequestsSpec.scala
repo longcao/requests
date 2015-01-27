@@ -23,9 +23,7 @@ class RequestsSpec extends FlatSpec
 
   s"""Requests.get("${getUrl.toString}")""" should "return a 200" in {
     val requests = Requests()
-    val result = requests.get(
-      url = getUrl,
-      data = "hello".getBytes)
+    val result = requests.get(url = getUrl)
 
     whenReady(result) { r =>
       r.status should === (org.requests.status.OK)
