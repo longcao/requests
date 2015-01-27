@@ -102,6 +102,30 @@ case class Requests(client: AsyncHttpClient) {
     result.future
   }
 
+  def head(
+    url: URL,
+    params: Map[String, String] = Map.empty,
+    data: Data = EmptyData,
+    headers: Map[String, Seq[String]] = Map.empty,
+    cookies: Seq[Cookie] = Seq.empty,
+    auth: Option[Auth] = None,
+    timeout: Option[Int] = None,
+    allowRedirects: Boolean = true,
+    proxy: Option[ProxyServer] = None
+  ): Future[Response] = {
+    request(
+      method = RequestMethod.HEAD,
+      url = url,
+      params = params,
+      data = data,
+      headers = headers,
+      cookies = cookies,
+      auth = auth,
+      timeout = timeout,
+      allowRedirects = allowRedirects,
+      proxy = proxy)
+  }
+
   def get(
     url: URL,
     params: Map[String, String] = Map.empty,
@@ -126,13 +150,102 @@ case class Requests(client: AsyncHttpClient) {
       proxy = proxy)
   }
 
-  def head: Future[Response] = ???
-  def post: Future[Response] = ???
-  def put: Future[Response] = ???
-  def patch: Future[Response] = ???
-  def delete: Future[Response] = ???
+  def post(
+    url: URL,
+    params: Map[String, String] = Map.empty,
+    data: Data = EmptyData,
+    headers: Map[String, Seq[String]] = Map.empty,
+    cookies: Seq[Cookie] = Seq.empty,
+    auth: Option[Auth] = None,
+    timeout: Option[Int] = None,
+    allowRedirects: Boolean = true,
+    proxy: Option[ProxyServer] = None
+  ): Future[Response] = {
+    request(
+      method = RequestMethod.POST,
+      url = url,
+      params = params,
+      data = data,
+      headers = headers,
+      cookies = cookies,
+      auth = auth,
+      timeout = timeout,
+      allowRedirects = allowRedirects,
+      proxy = proxy)
+  }
+
+  def put(
+    url: URL,
+    params: Map[String, String] = Map.empty,
+    data: Data = EmptyData,
+    headers: Map[String, Seq[String]] = Map.empty,
+    cookies: Seq[Cookie] = Seq.empty,
+    auth: Option[Auth] = None,
+    timeout: Option[Int] = None,
+    allowRedirects: Boolean = true,
+    proxy: Option[ProxyServer] = None
+  ): Future[Response] = {
+    request(
+      method = RequestMethod.PUT,
+      url = url,
+      params = params,
+      data = data,
+      headers = headers,
+      cookies = cookies,
+      auth = auth,
+      timeout = timeout,
+      allowRedirects = allowRedirects,
+      proxy = proxy)
+  }
+
+  def patch(
+    url: URL,
+    params: Map[String, String] = Map.empty,
+    data: Data = EmptyData,
+    headers: Map[String, Seq[String]] = Map.empty,
+    cookies: Seq[Cookie] = Seq.empty,
+    auth: Option[Auth] = None,
+    timeout: Option[Int] = None,
+    allowRedirects: Boolean = true,
+    proxy: Option[ProxyServer] = None
+  ): Future[Response] = {
+    request(
+      method = RequestMethod.PATCH,
+      url = url,
+      params = params,
+      data = data,
+      headers = headers,
+      cookies = cookies,
+      auth = auth,
+      timeout = timeout,
+      allowRedirects = allowRedirects,
+      proxy = proxy)
+  }
+
+  def delete(
+    url: URL,
+    params: Map[String, String] = Map.empty,
+    data: Data = EmptyData,
+    headers: Map[String, Seq[String]] = Map.empty,
+    cookies: Seq[Cookie] = Seq.empty,
+    auth: Option[Auth] = None,
+    timeout: Option[Int] = None,
+    allowRedirects: Boolean = true,
+    proxy: Option[ProxyServer] = None
+  ): Future[Response] = {
+    request(
+      method = RequestMethod.DELETE,
+      url = url,
+      params = params,
+      data = data,
+      headers = headers,
+      cookies = cookies,
+      auth = auth,
+      timeout = timeout,
+      allowRedirects = allowRedirects,
+      proxy = proxy)
+  }
 
   def codes: Map[String, Int] = Status.statusToCodes
-
   def close = client.close()
 }
