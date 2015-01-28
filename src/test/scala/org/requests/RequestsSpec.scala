@@ -6,7 +6,6 @@ import org.requests.Implicits._
 
 import org.scalactic.TypeCheckedTripleEquals
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.concurrent.ScalaFutures._
 import org.scalatest.time.{ Millis, Seconds, Span }
 import org.scalatest.{ FlatSpec, Matchers }
 
