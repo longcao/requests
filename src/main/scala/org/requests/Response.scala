@@ -84,7 +84,7 @@ case class Response(
   lazy val isPermanentRedirect: Boolean = status == MovedPermanently || status == PermanentRedirect
 
   lazy val json: String = "placeholder"
-  def text(encoding: Charset): String = new String(content, encoding)
+  def text: Option[String] = apparentEncoding().map(new String(content, _))
 
   lazy val reason = status.reason
   lazy val statusCode = status.code
