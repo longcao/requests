@@ -19,6 +19,7 @@ class RequestsSpec extends FlatSpec
   implicit val defaultPatience = PatienceConfig(timeout = Span(2, Seconds), interval = Span(100, Millis))
 
   val getUrl = "http://httpbin.org/get"
+  val slowUrl = "http://httpbin.org/delay/1"
   val expiredCertUrl = "https://testssl-expire.disig.sk/index.en.html"
   val utf8 = "http://httpbin.org/encoding/utf8"
 
@@ -53,6 +54,19 @@ class RequestsSpec extends FlatSpec
       returnedHeaders should === (headers)
       args should === (params)
       r.status should === (org.requests.status.OK)
+    }
+
+    requests.close
+  }
+
+  s"""Requests.get("$slowUrl")""" should "contain a TimeoutException when given a very short timeout (ms)" in {
+    val requests = Requests()
+    val result = requests.get(
+      url = slowUrl,
+      timeout = Some(1))
+
+    whenReady(result.failed) { r =>
+      r shouldBe a [java.util.concurrent.TimeoutException]
     }
 
     requests.close
