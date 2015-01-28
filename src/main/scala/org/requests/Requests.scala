@@ -12,7 +12,6 @@ import com.ning.http.client.{
   RequestBuilder
 }
 
-import java.net.URL
 import javax.net.ssl.SSLContext
 
 import org.requests.status.Status
@@ -37,7 +36,7 @@ object Requests {
 case class Requests(client: AsyncHttpClient) {
   def request(
     method: RequestMethod,
-    url: URL,
+    url: String,
     params: Map[String, String] = Map.empty,
     data: Data = EmptyData,
     headers: Map[String, Seq[String]] = Map.empty,
@@ -63,7 +62,7 @@ case class Requests(client: AsyncHttpClient) {
 
     // configure the request
     val requestBuilder = new RequestBuilder(method.toString)
-      .setUrl(url.toString)
+      .setUrl(url)
       .setFollowRedirects(allowRedirects)
       .setHeaders(nsHeaders)
       .setQueryParams(queryParams)
@@ -104,7 +103,7 @@ case class Requests(client: AsyncHttpClient) {
   }
 
   def head(
-    url: URL,
+    url: String,
     params: Map[String, String] = Map.empty,
     data: Data = EmptyData,
     headers: Map[String, Seq[String]] = Map.empty,
@@ -128,7 +127,7 @@ case class Requests(client: AsyncHttpClient) {
   }
 
   def get(
-    url: URL,
+    url: String,
     params: Map[String, String] = Map.empty,
     data: Data = EmptyData,
     headers: Map[String, Seq[String]] = Map.empty,
@@ -152,7 +151,7 @@ case class Requests(client: AsyncHttpClient) {
   }
 
   def post(
-    url: URL,
+    url: String,
     params: Map[String, String] = Map.empty,
     data: Data = EmptyData,
     headers: Map[String, Seq[String]] = Map.empty,
@@ -176,7 +175,7 @@ case class Requests(client: AsyncHttpClient) {
   }
 
   def put(
-    url: URL,
+    url: String,
     params: Map[String, String] = Map.empty,
     data: Data = EmptyData,
     headers: Map[String, Seq[String]] = Map.empty,
@@ -200,7 +199,7 @@ case class Requests(client: AsyncHttpClient) {
   }
 
   def patch(
-    url: URL,
+    url: String,
     params: Map[String, String] = Map.empty,
     data: Data = EmptyData,
     headers: Map[String, Seq[String]] = Map.empty,
@@ -224,7 +223,7 @@ case class Requests(client: AsyncHttpClient) {
   }
 
   def delete(
-    url: URL,
+    url: String,
     params: Map[String, String] = Map.empty,
     data: Data = EmptyData,
     headers: Map[String, Seq[String]] = Map.empty,

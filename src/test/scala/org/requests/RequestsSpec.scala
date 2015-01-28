@@ -19,11 +19,11 @@ class RequestsSpec extends FlatSpec
 
   implicit val defaultPatience = PatienceConfig(timeout = Span(2, Seconds), interval = Span(100, Millis))
 
-  val getUrl = new java.net.URL("http://httpbin.org/get")
-  val expiredCertUrl = new java.net.URL("https://testssl-expire.disig.sk/index.en.html")
-  val utf8 = new java.net.URL("http://httpbin.org/encoding/utf8")
+  val getUrl = "http://httpbin.org/get"
+  val expiredCertUrl = "https://testssl-expire.disig.sk/index.en.html"
+  val utf8 = "http://httpbin.org/encoding/utf8"
 
-  s"""Requests.get("${getUrl.toString}")""" should "return the correct response" in {
+  s"""Requests.get("$getUrl")""" should "return the correct response" in {
     val requests = Requests()
 
     val params = Map("k1" -> "v1", "k2" -> "v2")
@@ -59,7 +59,7 @@ class RequestsSpec extends FlatSpec
     requests.close
   }
 
-  s"""Requests.get("${utf8.toString}")""" should "return the correct encoding" in {
+  s"""Requests.get("$utf8")""" should "return the correct encoding" in {
     val requests = Requests()
     val result = requests.get(url = utf8)
 
@@ -71,7 +71,7 @@ class RequestsSpec extends FlatSpec
     requests.close
   }
 
-  s"""Requests.get("${expiredCertUrl.toString}")""" should "contain a ConnectException" in {
+  s"""Requests.get("$expiredCertUrl")""" should "contain a ConnectException" in {
     val requests = Requests()
     val result = requests.get(url = expiredCertUrl)
 
@@ -82,7 +82,7 @@ class RequestsSpec extends FlatSpec
     requests.close
   }
 
-  s"""Requests.get("${expiredCertUrl.toString}"), verify = false""" should "return a 200" in {
+  s"""Requests.get("$expiredCertUrl"), verify = false""" should "return a 200" in {
     val requests = Requests(verify = false)
     val result = requests.get(url = expiredCertUrl)
 
