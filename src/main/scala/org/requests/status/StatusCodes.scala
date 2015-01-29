@@ -1,7 +1,5 @@
 package org.requests.status
 
-import scala.annotation.switch
-
 /**
  * This is mostly taken from the dropped scalaz.http module,
  * but simplified and with a few additions.

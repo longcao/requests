@@ -6,9 +6,9 @@ import com.ning.http.client.{
   AsyncHttpClientConfigDefaults,
   AsyncCompletionHandler,
   FluentCaseInsensitiveStringsMap,
-  Param => NingParam,
+  Param => AHCParam,
   ProxyServer,
-  Response => NingResponse,
+  Response => AHCResponse,
   RequestBuilder
 }
 
@@ -55,9 +55,9 @@ case class Requests(client: AsyncHttpClient) {
       new FluentCaseInsensitiveStringsMap(hs)
     }
 
-    val queryParams: java.util.List[NingParam] =
+    val queryParams: java.util.List[AHCParam] =
       params.to[Seq].map { case (name, value) =>
-        new NingParam(name, value)
+        new AHCParam(name, value)
       }.asJava
 
     // configure the request
@@ -88,10 +88,10 @@ case class Requests(client: AsyncHttpClient) {
 
     client.executeRequest(
       requestBuilderWithBody.build(),
-      new AsyncCompletionHandler[NingResponse]() {
-        override def onCompleted(ningResponse: NingResponse): NingResponse = {
-          result.success(Response(ningResponse))
-          ningResponse
+      new AsyncCompletionHandler[AHCResponse]() {
+        override def onCompleted(AHCResponse: AHCResponse): AHCResponse = {
+          result.success(Response(AHCResponse))
+          AHCResponse
         }
         override def onThrowable(t: Throwable): Unit = {
           result.failure(t)

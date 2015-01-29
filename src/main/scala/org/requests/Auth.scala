@@ -1,7 +1,7 @@
 package org.requests
 
 import com.ning.http.client.Realm
-import com.ning.http.client.Realm.{ AuthScheme => NingAuthScheme, RealmBuilder }
+import com.ning.http.client.Realm.{ AuthScheme => AHCAuthScheme, RealmBuilder }
 
 trait AuthScheme
 object AuthScheme {
@@ -14,13 +14,13 @@ object AuthScheme {
 }
 
 case class Auth(user: String, password: String, scheme: AuthScheme) {
-  private def toNingAuthScheme(scheme: AuthScheme): NingAuthScheme = scheme match {
-    case AuthScheme.DIGEST   => NingAuthScheme.DIGEST
-    case AuthScheme.BASIC    => NingAuthScheme.BASIC
-    case AuthScheme.NTLM     => NingAuthScheme.NTLM
-    case AuthScheme.SPNEGO   => NingAuthScheme.SPNEGO
-    case AuthScheme.KERBEROS => NingAuthScheme.KERBEROS
-    case AuthScheme.NONE     => NingAuthScheme.NONE
+  private def toAHCAuthScheme(scheme: AuthScheme): AHCAuthScheme = scheme match {
+    case AuthScheme.DIGEST   => AHCAuthScheme.DIGEST
+    case AuthScheme.BASIC    => AHCAuthScheme.BASIC
+    case AuthScheme.NTLM     => AHCAuthScheme.NTLM
+    case AuthScheme.SPNEGO   => AHCAuthScheme.SPNEGO
+    case AuthScheme.KERBEROS => AHCAuthScheme.KERBEROS
+    case AuthScheme.NONE     => AHCAuthScheme.NONE
   }
 
   def toRealm: Realm =
@@ -28,6 +28,6 @@ case class Auth(user: String, password: String, scheme: AuthScheme) {
       .setPrincipal(user)
       .setPassword(password)
       .setUsePreemptiveAuth(true)
-      .setScheme(toNingAuthScheme(scheme))
+      .setScheme(toAHCAuthScheme(scheme))
       .build
 }

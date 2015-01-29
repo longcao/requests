@@ -1,25 +1,25 @@
 package org.requests
 
-import com.ning.http.client.cookie.{ Cookie => NingCookie }
+import com.ning.http.client.cookie.{ Cookie => AHCCookie }
 
 object Cookie {
-  def apply(nc: NingCookie): Cookie = {
+  def apply(ahcc: AHCCookie): Cookie = {
     Cookie(
-      domain = nc.getDomain,
-      expires = if (nc.getExpires == -1) None else Some(nc.getExpires),
-      httpOnly = nc.isHttpOnly,
-      maxAge = if (nc.getMaxAge == -1) None else Some(nc.getMaxAge),
-      name = if (nc.getName.isEmpty) None else Some(nc.getName),
-      path = nc.getPath,
-      secure = nc.isSecure,
-      value = if (nc.getValue.isEmpty) None else Some(nc.getValue))
+      domain = ahcc.getDomain,
+      expires = if (ahcc.getExpires == -1) None else Some(ahcc.getExpires),
+      httpOnly = ahcc.isHttpOnly,
+      maxAge = if (ahcc.getMaxAge == -1) None else Some(ahcc.getMaxAge),
+      name = if (ahcc.getName.isEmpty) None else Some(ahcc.getName),
+      path = ahcc.getPath,
+      secure = ahcc.isSecure,
+      value = if (ahcc.getValue.isEmpty) None else Some(ahcc.getValue))
   }
 
   /**
    * Converts a Seq[Cookie] into a flattened cookie header in the form of:
    * "Cookie" -> "name1=value2; name2=value2;" etc
    *
-   * This is used mainly because the conversion from Cookie -> NingCookie
+   * This is used mainly because the conversion from Cookie -> AHCCookie
    * and using RequestBuilder.addCookie is trickier than just adding cookie headers.
    */
   def cookiesToHeader(cookies: Seq[Cookie]): Option[(String, Seq[String])] = {

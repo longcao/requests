@@ -1,6 +1,6 @@
 package org.requests
 
-import com.ning.http.client.{ Response => NingResponse }
+import com.ning.http.client.{ Response => AHCResponse }
 
 import java.nio.charset.Charset
 
@@ -12,9 +12,9 @@ import scala.collection.JavaConverters._
 import scala.util.{ Failure, Success, Try }
 
 object Response {
-  def apply(nr: NingResponse): Response = {
+  def apply(ahcr: AHCResponse): Response = {
     val headers: Map[String, Seq[String]] = {
-      val hs = mapAsScalaMapConverter(nr.getHeaders).asScala
+      val hs = mapAsScalaMapConverter(ahcr.getHeaders).asScala
         .toSeq
         .map { case (k ,v) => k -> v.asScala.to[Seq] }
 
@@ -23,18 +23,18 @@ object Response {
       })
     }
 
-    val status: Status = Try(Status.codesToStatus(nr.getStatusCode)) match {
+    val status: Status = Try(Status.codesToStatus(ahcr.getStatusCode)) match {
       case Success(status) => status
-      case Failure(ex) => Unknown(nr.getStatusCode, nr.getStatusText)
+      case Failure(ex) => Unknown(ahcr.getStatusCode, ahcr.getStatusText)
     }
 
     Response(
-      content = nr.getResponseBodyAsBytes,
-      cookies = nr.getCookies.asScala.to[Seq].map(Cookie(_)),
+      content = ahcr.getResponseBodyAsBytes,
+      cookies = ahcr.getCookies.asScala.to[Seq].map(Cookie(_)),
       headers = headers,
-      isRedirect = nr.isRedirected,
+      isRedirect = ahcr.isRedirected,
       status= status,
-      url = nr.getUri.toString
+      url = ahcr.getUri.toString
     )
   }
 }
