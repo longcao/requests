@@ -47,7 +47,7 @@ class RequestsSpec extends FlatSpec
       params = params)
 
     whenReady(result) { r =>
-      val data = Json.parse(r.content)
+      val data = Json.parse(r.json)
       val args = (data \ "args").as[Map[String, String]]
       val returnedHeaders = Map("Test-Header" -> Seq((data \ "headers" \ "Test-Header").as[String]))
 
