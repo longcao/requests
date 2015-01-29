@@ -22,6 +22,7 @@ class RequestsSpec extends FlatSpec
   val slowUrl = "http://httpbin.org/delay/1"
   val expiredCertUrl = "https://testssl-expire.disig.sk/index.en.html"
   val utf8 = "http://httpbin.org/encoding/utf8"
+  val redirectUrl = "http://httpbin.org/redirect/1"
 
   s"""Requests.get("$getUrl")""" should "return the correct response" in {
     val requests = Requests()
@@ -67,6 +68,29 @@ class RequestsSpec extends FlatSpec
 
     whenReady(result.failed) { r =>
       r shouldBe a [java.util.concurrent.TimeoutException]
+    }
+
+    requests.close
+  }
+
+  s"""Requests.get("$redirectUrl")""" should "redirect correctly" in {
+    val requests = Requests()
+    val result = requests.get(url = redirectUrl)
+
+    whenReady(result) { r =>
+      r.url should === (getUrl)
+      r.status should === (org.requests.status.OK)
+    }
+
+    requests.close
+  }
+
+  s"""Requests.get("$redirectUrl", allowRedirects = false)""" should "not redirect" in {
+    val requests = Requests()
+    val result = requests.get(url = redirectUrl, allowRedirects = false)
+
+    whenReady(result) { r =>
+      r.status should === (org.requests.status.Found)
     }
 
     requests.close
