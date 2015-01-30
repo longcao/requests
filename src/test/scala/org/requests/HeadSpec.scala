@@ -3,7 +3,7 @@ package org.requests
 class HeadSpec extends RequestsSpec {
   behavior of s"""head("$getUrl")"""
 
-  it should "an OK with headers but no message body" in {
+  it should "be an OK with headers but no message body" in {
     val result = requests.head(url = getUrl)
 
     whenReady(result) { r =>
