@@ -6,6 +6,7 @@ import org.scalatest.time.{ Millis, Seconds, Span }
 import org.scalatest.{ BeforeAndAfterAll, FlatSpec, Matchers }
 
 trait RequestsSpec extends FlatSpec
+  with BasicTestUrls
   with BeforeAndAfterAll
   with Matchers
   with ScalaFutures

@@ -7,11 +7,10 @@ import org.requests.Implicits._
 import play.api.libs.json.Json
 
 class GetSpec extends RequestsSpec {
-  val getUrl = "http://httpbin.org/get"
-  val slowUrl = "http://httpbin.org/delay/1"
-  val expiredCertUrl = "https://testssl-expire.disig.sk/index.en.html"
-  val utf8 = "http://httpbin.org/encoding/utf8"
-  val redirectUrl = "http://httpbin.org/redirect/1"
+  private val slowUrl        = "http://httpbin.org/delay/1"
+  private val expiredCertUrl = "https://testssl-expire.disig.sk/index.en.html"
+  private val utf8Url        = "http://httpbin.org/encoding/utf8"
+  private val redirectUrl    = "http://httpbin.org/redirect/1"
 
   s"""get("$getUrl")""" should "return the correct response" in {
     val params = Map("k1" -> "v1", "k2" -> "v2")
@@ -72,8 +71,8 @@ class GetSpec extends RequestsSpec {
     }
   }
 
-  s"""get("$utf8")""" should "return the correct encoding" in {
-    val result = requests.get(url = utf8)
+  s"""get("$utf8Url")""" should "return the correct encoding" in {
+    val result = requests.get(url = utf8Url)
 
     whenReady(result) { r =>
       r.text should be ('defined)
