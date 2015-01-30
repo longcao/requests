@@ -90,7 +90,7 @@ class GetSpec extends RequestsSpec {
     }
   }
 
-  s"""get("$expiredCertUrl", verify = false)""" should "return a 200" in {
+  s"""get("$expiredCertUrl"), verify = false""" should "return a 200" in {
     val requests = Requests(verify = false)
     val result = requests.get(url = expiredCertUrl)
 
