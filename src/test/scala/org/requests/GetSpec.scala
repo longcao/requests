@@ -13,9 +13,7 @@ class GetSpec extends RequestsSpec {
   val utf8 = "http://httpbin.org/encoding/utf8"
   val redirectUrl = "http://httpbin.org/redirect/1"
 
-  s"""Requests.get("$getUrl")""" should "return the correct response" in {
-    val requests = Requests()
-
+  s"""get("$getUrl")""" should "return the correct response" in {
     val params = Map("k1" -> "v1", "k2" -> "v2")
     val headers = Map("Test-Header" -> Seq("zxcv"))
     val cookies = Seq(
@@ -45,12 +43,9 @@ class GetSpec extends RequestsSpec {
       args should === (params)
       r.status should === (org.requests.status.OK)
     }
-
-    requests.close
   }
 
-  s"""Requests.get("$slowUrl")""" should "contain a TimeoutException when given a very short timeout (ms)" in {
-    val requests = Requests()
+  s"""get("$slowUrl")""" should "contain a TimeoutException when given a very short timeout (ms)" in {
     val result = requests.get(
       url = slowUrl,
       timeout = Some(1))
@@ -58,35 +53,26 @@ class GetSpec extends RequestsSpec {
     whenReady(result.failed) { r =>
       r shouldBe a [java.util.concurrent.TimeoutException]
     }
-
-    requests.close
   }
 
-  s"""Requests.get("$redirectUrl")""" should "redirect correctly" in {
-    val requests = Requests()
+  s"""get("$redirectUrl")""" should "redirect correctly" in {
     val result = requests.get(url = redirectUrl)
 
     whenReady(result) { r =>
       r.url should === (getUrl)
       r.status should === (org.requests.status.OK)
     }
-
-    requests.close
   }
 
-  s"""Requests.get("$redirectUrl", allowRedirects = false)""" should "not redirect" in {
-    val requests = Requests()
+  s"""get("$redirectUrl", allowRedirects = false)""" should "not redirect" in {
     val result = requests.get(url = redirectUrl, allowRedirects = false)
 
     whenReady(result) { r =>
       r.status should === (org.requests.status.Found)
     }
-
-    requests.close
   }
 
-  s"""Requests.get("$utf8")""" should "return the correct encoding" in {
-    val requests = Requests()
+  s"""get("$utf8")""" should "return the correct encoding" in {
     val result = requests.get(url = utf8)
 
     whenReady(result) { r =>
@@ -94,22 +80,17 @@ class GetSpec extends RequestsSpec {
       r.apparentEncoding() should === (Some(UTF_8)) // read from Content-type header
       r.apparentEncoding(true) should === (Some(UTF_8)) // Chardet
     }
-
-    requests.close
   }
 
-  s"""Requests.get("$expiredCertUrl")""" should "contain a ConnectException" in {
-    val requests = Requests()
+  s"""get("$expiredCertUrl")""" should "contain a ConnectException" in {
     val result = requests.get(url = expiredCertUrl)
 
     whenReady(result.failed) { r =>
       r shouldBe a [java.net.ConnectException]
     }
-
-    requests.close
   }
 
-  s"""Requests.get("$expiredCertUrl", verify = false)""" should "return a 200" in {
+  s"""get("$expiredCertUrl", verify = false)""" should "return a 200" in {
     val requests = Requests(verify = false)
     val result = requests.get(url = expiredCertUrl)
 
