@@ -10,7 +10,6 @@ class GetSpec extends RequestsSpec {
   private val slowUrl        = "http://httpbin.org/delay/1"
   private val expiredCertUrl = "https://testssl-expire.disig.sk/index.en.html"
   private val utf8Url        = "http://httpbin.org/encoding/utf8"
-  private val redirectUrl    = "http://httpbin.org/redirect/1"
 
   s"""get("$getUrl")""" should "return the correct response" in {
     val params = Map("k1" -> "v1", "k2" -> "v2")
@@ -51,23 +50,6 @@ class GetSpec extends RequestsSpec {
 
     whenReady(result.failed) { r =>
       r shouldBe a [java.util.concurrent.TimeoutException]
-    }
-  }
-
-  s"""get("$redirectUrl")""" should "redirect correctly" in {
-    val result = requests.get(url = redirectUrl)
-
-    whenReady(result) { r =>
-      r.url should === (getUrl)
-      r.status should === (org.requests.status.OK)
-    }
-  }
-
-  s"""get("$redirectUrl", allowRedirects = false)""" should "not redirect" in {
-    val result = requests.get(url = redirectUrl, allowRedirects = false)
-
-    whenReady(result) { r =>
-      r.status should === (org.requests.status.Found)
     }
   }
 
