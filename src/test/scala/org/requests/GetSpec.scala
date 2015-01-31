@@ -1,17 +1,13 @@
 package org.requests
 
-import java.nio.charset.StandardCharsets.UTF_8
-
 import org.requests.Implicits._
 
 import play.api.libs.json.Json
 
 class GetSpec extends RequestsSpec {
-  private val slowUrl        = "http://httpbin.org/delay/1"
-  private val expiredCertUrl = "https://testssl-expire.disig.sk/index.en.html"
-  private val utf8Url        = "http://httpbin.org/encoding/utf8"
+  behavior of s"""get("$getUrl")"""
 
-  s"""get("$getUrl")""" should "return the correct response" in {
+  it should "return the correct response" in {
     val params = Map("k1" -> "v1", "k2" -> "v2")
     val headers = Map("Test-Header" -> Seq("zxcv"))
     val cookies = Seq(
@@ -41,44 +37,5 @@ class GetSpec extends RequestsSpec {
       args should === (params)
       r.status should === (org.requests.status.OK)
     }
-  }
-
-  s"""get("$slowUrl")""" should "contain a TimeoutException when given a very short timeout (ms)" in {
-    val result = requests.get(
-      url = slowUrl,
-      timeout = Some(1))
-
-    whenReady(result.failed) { r =>
-      r shouldBe a [java.util.concurrent.TimeoutException]
-    }
-  }
-
-  s"""get("$utf8Url")""" should "return the correct encoding" in {
-    val result = requests.get(url = utf8Url)
-
-    whenReady(result) { r =>
-      r.text should be ('defined)
-      r.apparentEncoding() should === (Some(UTF_8)) // read from Content-type header
-      r.apparentEncoding(true) should === (Some(UTF_8)) // Chardet
-    }
-  }
-
-  s"""get("$expiredCertUrl")""" should "contain a ConnectException" in {
-    val result = requests.get(url = expiredCertUrl)
-
-    whenReady(result.failed) { r =>
-      r shouldBe a [java.net.ConnectException]
-    }
-  }
-
-  s"""get("$expiredCertUrl"), verify = false""" should "return a 200" in {
-    val requests = Requests(verify = false)
-    val result = requests.get(url = expiredCertUrl)
-
-    whenReady(result) { r =>
-      r.status should === (org.requests.status.OK)
-    }
-
-    requests.close
   }
 }

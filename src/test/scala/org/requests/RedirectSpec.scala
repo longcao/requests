@@ -1,7 +1,7 @@
 package org.requests
 
 class RedirectSpec extends RequestsSpec {
-  private val redirectUrl    = "http://httpbin.org/redirect/1"
+  private val redirectUrl = "http://httpbin.org/redirect/1"
   behavior of s"""get("$redirectUrl")"""
 
   it should "redirect correctly" in {
