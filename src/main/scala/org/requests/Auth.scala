@@ -25,9 +25,10 @@ case class Auth(user: String, password: String, scheme: AuthScheme) {
 
   def toRealm: Realm =
     new RealmBuilder()
+      .setScheme(toAHCAuthScheme(scheme))
       .setPrincipal(user)
       .setPassword(password)
-      .setUsePreemptiveAuth(true)
-      .setScheme(toAHCAuthScheme(scheme))
+      .setUseAbsoluteURI(false)
+      .setUsePreemptiveAuth(false)
       .build
 }
