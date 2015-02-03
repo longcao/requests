@@ -89,9 +89,9 @@ case class Requests(client: AsyncHttpClient) {
     client.executeRequest(
       requestBuilderWithBody.build(),
       new AsyncCompletionHandler[AHCResponse]() {
-        override def onCompleted(AHCResponse: AHCResponse): AHCResponse = {
-          result.success(Response(AHCResponse))
-          AHCResponse
+        override def onCompleted(ahcResponse: AHCResponse): AHCResponse = {
+          result.success(Response(ahcResponse))
+          ahcResponse
         }
         override def onThrowable(t: Throwable): Unit = {
           result.failure(t)
