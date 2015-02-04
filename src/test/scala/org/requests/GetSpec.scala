@@ -22,7 +22,7 @@ class GetSpec extends RequestsSpec {
         value = Some("value")))
 
     val result = requests.get(
-      url = getUrl,
+      url = getUrl + "?hello=goodbye",
       headers = headers,
       cookies = cookies,
       params = params)
@@ -32,9 +32,11 @@ class GetSpec extends RequestsSpec {
       val args = (data \ "args").as[Map[String, String]]
       val returnedHeaders = Map("Test-Header" -> Seq((data \ "headers" \ "Test-Header").as[String]))
 
+      val combinedParams = params + ("hello" -> "goodbye")
+
       r.headers.get("Content-Type") should === (Some(Vector("application/json")))
       returnedHeaders should === (headers)
-      args should === (params)
+      args should === (combinedParams)
       r.status should === (org.requests.status.OK)
     }
   }

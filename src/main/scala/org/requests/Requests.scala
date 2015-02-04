@@ -65,7 +65,7 @@ case class Requests(client: AsyncHttpClient) {
       .setUrl(url)
       .setFollowRedirects(allowRedirects)
       .setHeaders(nsHeaders)
-      .setQueryParams(queryParams)
+      .addQueryParams(queryParams)
       .setRequestTimeout(timeout.getOrElse(0)) // default to 0, falls back to client config
       .setProxyServer(proxy.getOrElse(null))
       .setRealm(auth.map(_.toRealm).getOrElse(null))
