@@ -48,7 +48,6 @@ case class Response(
   isRedirect: Boolean,
   //iterContent,
   //iterLines,
-  //links,
   //raw,
   //request,
   status: Status,
@@ -89,6 +88,20 @@ case class Response(
    */
   lazy val json: String = new String(content)
   def text: Option[String] = apparentEncoding().map(new String(content, _))
+
+  lazy val links: Map[String, String] = {
+    headers.getOrElse("Link", Seq.empty)
+      .flatMap(_.split(", "))
+      .flatMap { link =>
+        val angles = """<(.*?)>""".r
+        val quotes = """\"(.*?)\"""".r
+
+        for {
+          url <- angles.findFirstMatchIn(link)
+          rel <- quotes.findFirstMatchIn(link)
+        } yield ((rel.group(1), url.group(1)))
+      }.toMap
+  }
 
   lazy val reason = status.reason
   lazy val statusCode = status.code
