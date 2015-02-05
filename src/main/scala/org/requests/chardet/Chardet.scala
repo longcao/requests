@@ -2,7 +2,14 @@ package org.requests.chardet
 
 import org.mozilla.universalchardet.UniversalDetector
 
+/**
+ * Chardet wrapper object for the universalchardet java API.
+ */
 object Chardet {
+
+  /**
+   * Attempts to guess the encoding of bytes, if any.
+   */
   def detectEncoding(bytes: Array[Byte]): Option[String] = {
     val detector: UniversalDetector = new UniversalDetector(null)
 

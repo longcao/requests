@@ -3,6 +3,10 @@ package org.requests
 import com.ning.http.client.cookie.{ Cookie => AHCCookie }
 
 object Cookie {
+
+  /**
+   * Constructs a Cookie from the java AHCCookie.
+   */
   def apply(ahcc: AHCCookie): Cookie = {
     Cookie(
       domain = ahcc.getDomain,

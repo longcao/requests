@@ -20,6 +20,11 @@ import scala.concurrent.{ Future, Promise }
 import scala.collection.JavaConverters.{ mapAsJavaMapConverter, seqAsJavaListConverter }
 
 object Requests {
+
+  /**
+   * Constructs a new Requests instance with options available
+   * to pass to the underlying AsyncHttpClientConfig.
+   */
   def apply(
     verify: Boolean = true,
     sslContext: SSLContext = null
@@ -34,6 +39,22 @@ object Requests {
 }
 
 case class Requests(client: AsyncHttpClient) {
+
+  /**
+   * Executes an HTTP request.
+   *
+   * @param method          HTTP verb
+   * @param url             request URL
+   * @param params          map of query params
+   * @param data            HTTP message body
+   * @param headers         map of request headers
+   * @param cookies         collection of request [[org.requests.Cookie]]s
+   * @param auth            optional HTTP authentication configuration
+   * @param timeout         request timeout, in milliseconds
+   * @param allowRedirects  if true, follow redirects
+   * @param proxy           optional proxy configuration
+   * @return                a `Future` holding the resulting response
+   */
   def request(
     method: RequestMethod,
     url: String,
@@ -102,6 +123,20 @@ case class Requests(client: AsyncHttpClient) {
     result.future
   }
 
+  /**
+   * Executes a HEAD request.
+   *
+   * @param url             request URL
+   * @param params          map of query params
+   * @param data            HTTP message body
+   * @param headers         map of request headers
+   * @param cookies         collection of request [[org.requests.Cookie]]s
+   * @param auth            optional HTTP authentication configuration
+   * @param timeout         request timeout, in milliseconds
+   * @param allowRedirects  if true, follow redirects
+   * @param proxy           optional proxy configuration
+   * @return                a `Future` holding the resulting response
+   */
   def head(
     url: String,
     params: Map[String, String] = Map.empty,
@@ -126,6 +161,21 @@ case class Requests(client: AsyncHttpClient) {
       proxy = proxy)
   }
 
+  /**
+   * Executes a GET request.
+   *
+   * @param method          HTTP verb
+   * @param url             request URL
+   * @param params          map of query params
+   * @param data            HTTP message body
+   * @param headers         map of request headers
+   * @param cookies         collection of request [[org.requests.Cookie]]s
+   * @param auth            optional HTTP authentication configuration
+   * @param timeout         request timeout, in milliseconds
+   * @param allowRedirects  if true, follow redirects
+   * @param proxy           optional proxy configuration
+   * @return                a `Future` holding the resulting response
+   */
   def get(
     url: String,
     params: Map[String, String] = Map.empty,
@@ -150,6 +200,21 @@ case class Requests(client: AsyncHttpClient) {
       proxy = proxy)
   }
 
+  /**
+   * Executes a POST request.
+   *
+   * @param method          HTTP verb
+   * @param url             request URL
+   * @param params          map of query params
+   * @param data            HTTP message body
+   * @param headers         map of request headers
+   * @param cookies         collection of request [[org.requests.Cookie]]s
+   * @param auth            optional HTTP authentication configuration
+   * @param timeout         request timeout, in milliseconds
+   * @param allowRedirects  if true, follow redirects
+   * @param proxy           optional proxy configuration
+   * @return                a `Future` holding the resulting response
+   */
   def post(
     url: String,
     params: Map[String, String] = Map.empty,
@@ -174,6 +239,21 @@ case class Requests(client: AsyncHttpClient) {
       proxy = proxy)
   }
 
+  /**
+   * Executes a PUT request.
+   *
+   * @param method          HTTP verb
+   * @param url             request URL
+   * @param params          map of query params
+   * @param data            HTTP message body
+   * @param headers         map of request headers
+   * @param cookies         collection of request [[org.requests.Cookie]]s
+   * @param auth            optional HTTP authentication configuration
+   * @param timeout         request timeout, in milliseconds
+   * @param allowRedirects  if true, follow redirects
+   * @param proxy           optional proxy configuration
+   * @return                a `Future` holding the resulting response
+   */
   def put(
     url: String,
     params: Map[String, String] = Map.empty,
@@ -198,6 +278,21 @@ case class Requests(client: AsyncHttpClient) {
       proxy = proxy)
   }
 
+  /**
+   * Executes a PATCH request.
+   *
+   * @param method          HTTP verb
+   * @param url             request URL
+   * @param params          map of query params
+   * @param data            HTTP message body
+   * @param headers         map of request headers
+   * @param cookies         collection of request [[org.requests.Cookie]]s
+   * @param auth            optional HTTP authentication configuration
+   * @param timeout         request timeout, in milliseconds
+   * @param allowRedirects  if true, follow redirects
+   * @param proxy           optional proxy configuration
+   * @return                a `Future` holding the resulting response
+   */
   def patch(
     url: String,
     params: Map[String, String] = Map.empty,
@@ -222,6 +317,21 @@ case class Requests(client: AsyncHttpClient) {
       proxy = proxy)
   }
 
+  /**
+   * Executes a DELETE request.
+   *
+   * @param method          HTTP verb
+   * @param url             request URL
+   * @param params          map of query params
+   * @param data            HTTP message body
+   * @param headers         map of request headers
+   * @param cookies         collection of request [[org.requests.Cookie]]s
+   * @param auth            optional HTTP authentication configuration
+   * @param timeout         request timeout, in milliseconds
+   * @param allowRedirects  if true, follow redirects
+   * @param proxy           optional proxy configuration
+   * @return                a `Future` holding the resulting response
+   */
   def delete(
     url: String,
     params: Map[String, String] = Map.empty,
@@ -246,6 +356,23 @@ case class Requests(client: AsyncHttpClient) {
       proxy = proxy)
   }
 
+  /**
+   * A map of HTTP status names to status codes.
+   */
   def codes: Map[String, Int] = Status.statusToCodes
+
+  /**
+   * Closes the underlying AsyncHttpClient.
+   *
+   * {{{
+   * import org.requests._
+   * import org.requests.Implicits._
+   *
+   * val requests = Requests()
+   * val result: Future[Response] = requests.get(url = "http://httpbin.org/get")
+   * requests.close
+   * }}}
+   *
+   */
   def close = client.close()
 }

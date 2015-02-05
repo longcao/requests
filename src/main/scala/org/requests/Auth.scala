@@ -3,6 +3,9 @@ package org.requests
 import com.ning.http.client.Realm
 import com.ning.http.client.Realm.{ AuthScheme => AHCAuthScheme, RealmBuilder }
 
+/**
+ * ADT that maps 1-to-1 with AHC's AuthScheme enums.
+ */
 trait AuthScheme
 object AuthScheme {
   case object DIGEST   extends AuthScheme

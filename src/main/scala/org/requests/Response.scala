@@ -12,6 +12,10 @@ import scala.collection.JavaConverters._
 import scala.util.{ Failure, Success, Try }
 
 object Response {
+
+  /**
+   * Constructs a Response from the java AHCResponse.
+   */
   def apply(ahcr: AHCResponse): Response = {
     val headers: Map[String, Seq[String]] = {
       val hs = mapAsScalaMapConverter(ahcr.getHeaders).asScala
@@ -67,6 +71,9 @@ case class Response(
   /**
    * Attempts to get the charset from the 'Content-Type' header if available,
    * then attempts to detect the charset from the content bytes.
+   *
+   * @param skipHeader skip attempting to parse the "Content-Type" header
+   * @return the inferred Charset, if any.
    */
   def apparentEncoding(skipHeader: Boolean = false): Option[Charset] = {
     if (skipHeader) {
@@ -84,6 +91,9 @@ case class Response(
 
   lazy val text: Option[String] = apparentEncoding().map(new String(content, _))
 
+  /**
+   * Parses the Link header, if any, and exposes it as a Map(rel -> url).
+   */
   lazy val links: Map[String, String] = {
     headers.getOrElse("Link", Seq.empty)
       .flatMap(_.split(", "))

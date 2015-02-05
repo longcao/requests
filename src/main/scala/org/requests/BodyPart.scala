@@ -5,7 +5,14 @@ import com.ning.http.client.multipart.{ ByteArrayPart, FilePart, Part, StringPar
 import java.io.File
 import java.nio.charset.Charset
 
+/**
+ * Types that extend this essentially wrap AHC's multipart body classes.
+ */
 sealed trait BodyPart {
+
+  /**
+   * Converts this to the corresponding AHC multipart body class.
+   */
   def toPart: Part
 }
 
