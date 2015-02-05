@@ -82,11 +82,6 @@ case class Response(
 
   lazy val isPermanentRedirect: Boolean = status == MovedPermanently || status == PermanentRedirect
 
-  /**
-   * This isn't really JSON but to avoid forcing a specific JSON library
-   * as a dependency you should use your choice JSON.parse() call.
-   */
-  lazy val json: String = new String(content)
   def text: Option[String] = apparentEncoding().map(new String(content, _))
 
   lazy val links: Map[String, String] = {
