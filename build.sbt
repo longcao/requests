@@ -6,6 +6,8 @@ scalaVersion := "2.11.4"
 
 scalacOptions ++= Seq("-deprecation", "-feature")
 
+autoAPIMappings := true
+
 fork in run := true
 
 resolvers += "Typesafe Releases" at "https://repo.typesafe.com/typesafe/releases/"
