@@ -42,9 +42,9 @@ object Response {
 case class Response(
   content: Array[Byte],
   cookies: Seq[Cookie] = Seq.empty,
-  elasped: Long = 0L,
+  //elasped: Long = 0L,
   headers: Map[String, Seq[String]] = Map.empty,
-  history: Seq[Response] = Seq.empty,
+  //history: Seq[Response] = Seq.empty,
   isRedirect: Boolean,
   //iterContent,
   //iterLines,
