@@ -82,7 +82,7 @@ case class Response(
 
   lazy val isPermanentRedirect: Boolean = status == MovedPermanently || status == PermanentRedirect
 
-  def text: Option[String] = apparentEncoding().map(new String(content, _))
+  lazy val text: Option[String] = apparentEncoding().map(new String(content, _))
 
   lazy val links: Map[String, String] = {
     headers.getOrElse("Link", Seq.empty)
