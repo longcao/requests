@@ -374,5 +374,5 @@ case class Requests(client: AsyncHttpClient) {
    * }}}
    *
    */
-  def close = client.close()
+  def close() = client.close()
 }
