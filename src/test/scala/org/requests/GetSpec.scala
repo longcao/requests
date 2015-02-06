@@ -35,6 +35,7 @@ class GetSpec extends RequestsSpec {
       val combinedParams = params + ("hello" -> "goodbye")
 
       r.headers.get("Content-Type") should === (Some(Vector("application/json")))
+      r.elasped should be > 0L
       returnedHeaders should === (headers)
       args should === (combinedParams)
       r.status should === (org.requests.status.OK)

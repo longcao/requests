@@ -16,7 +16,7 @@ object Response {
   /**
    * Constructs a Response from the java AHCResponse.
    */
-  def apply(ahcr: AHCResponse): Response = {
+  def construct(ahcr: AHCResponse, elasped: Long = 0L): Response = {
     val headers: Map[String, Seq[String]] = {
       val hs = mapAsScalaMapConverter(ahcr.getHeaders).asScala
         .toSeq
@@ -35,6 +35,7 @@ object Response {
     Response(
       content = ahcr.getResponseBodyAsBytes,
       cookies = ahcr.getCookies.asScala.to[Seq].map(Cookie(_)),
+      elasped = elasped,
       headers = headers,
       isRedirect = ahcr.isRedirected,
       status= status,
@@ -45,9 +46,9 @@ object Response {
 
 case class Response(
   content: Array[Byte],
-  cookies: Seq[Cookie] = Seq.empty,
-  //elasped: Long = 0L,
-  headers: Map[String, Seq[String]] = Map.empty,
+  cookies: Seq[Cookie],
+  elasped: Long,
+  headers: Map[String, Seq[String]],
   //history: Seq[Response] = Seq.empty,
   isRedirect: Boolean,
   //iterContent,
