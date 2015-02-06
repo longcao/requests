@@ -2,7 +2,7 @@ name := """requests"""
 
 version := "0.1.0-SNAPSHOT"
 
-scalaVersion := "2.11.4"
+scalaVersion := "2.11.5"
 
 
 scalacOptions ++= Seq(
