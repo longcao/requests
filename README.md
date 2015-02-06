@@ -13,6 +13,16 @@ Requests for Scala is a small library for making HTTP requests and built on top 
     - Sessions
     - Redirect history
 
+## Get
+
+Requests for Scala is cross published to 2.10.4 and 2.11.5. Add the Bintray resolver and the dependency to your build.sbt to use it:
+
+```
+resolvers += "requests" at "http://dl.bintray.com/longcao/maven"
+
+libraryDependencies += "org.requests" %% "requests" % "0.1.0"
+```
+
 ## Quickstart
 
 ```scala

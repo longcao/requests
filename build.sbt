@@ -1,9 +1,12 @@
-name := """requests"""
+organization := "org.requests"
 
-version := "0.1.0-SNAPSHOT"
+name := "requests"
+
+version := "0.1.0"
 
 scalaVersion := "2.11.5"
 
+crossScalaVersions := Seq("2.10.4", "2.11.5")
 
 scalacOptions ++= Seq(
   "-Xlint",
@@ -17,6 +20,12 @@ autoAPIMappings := true
 fork in run := true
 
 resolvers += "Typesafe Releases" at "https://repo.typesafe.com/typesafe/releases/"
+
+bintrayPublishSettings
+
+bintray.Keys.packageLabels in bintray.Keys.bintray := Seq("scala", "requests", "http", "http client", "async")
+
+licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
 
 libraryDependencies ++= Seq(
   "com.ning" % "async-http-client" % "1.9.8",
