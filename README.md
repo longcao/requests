@@ -22,7 +22,7 @@ Requests for Scala is cross published to 2.10.4 and 2.11.5. Add the Bintray reso
 ```
 resolvers += "requests" at "http://dl.bintray.com/longcao/maven"
 
-libraryDependencies += "org.requests" %% "requests" % "0.1.0"
+libraryDependencies += "org.requests" %% "requests" % "0.1.1"
 ```
 
 ## Quickstart

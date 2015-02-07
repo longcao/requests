@@ -30,7 +30,7 @@ object Requests {
     sslContext: SSLContext = null
   ): Requests = {
     val config = new AsyncHttpClientConfig.Builder()
-      .setUserAgent("Requests.scala/0.1.0")
+      .setUserAgent("Requests.scala/0.1.1")
       .setAcceptAnyCertificate(!verify)
       .setSSLContext(sslContext)
 
@@ -67,6 +67,7 @@ case class Requests(client: AsyncHttpClient) {
     allowRedirects: Boolean = true,
     proxy: Option[ProxyServer] = None
   ): Future[Response] = {
+    val startTimeMillis = System.currentTimeMillis
 
     val nsHeaders: FluentCaseInsensitiveStringsMap = {
       val hs = (headers ++ Cookie.cookiesToHeader(cookies))
@@ -111,7 +112,7 @@ case class Requests(client: AsyncHttpClient) {
       requestBuilderWithBody.build(),
       new AsyncCompletionHandler[AHCResponse]() {
         override def onCompleted(ahcResponse: AHCResponse): AHCResponse = {
-          result.success(Response(ahcResponse))
+          result.success(Response.construct(ahcResponse, System.currentTimeMillis - startTimeMillis))
           ahcResponse
         }
         override def onThrowable(t: Throwable): Unit = {
@@ -374,5 +375,5 @@ case class Requests(client: AsyncHttpClient) {
    * }}}
    *
    */
-  def close = client.close()
+  def close() = client.close()
 }
