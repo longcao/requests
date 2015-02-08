@@ -1,6 +1,7 @@
 # Requests for Scala
 
 [![Build Status](https://travis-ci.org/longcao/requests.svg?branch=master)](https://travis-ci.org/longcao/requests)
+[![Coverage Status](https://coveralls.io/repos/longcao/requests/badge.svg?branch=master)](https://coveralls.io/r/longcao/requests?branch=master)
 
 Requests for Scala is a small library for making HTTP requests and built on top of [AsyncHttpClient/async-http-client](https://github.com/AsyncHttpClient/async-http-client) but with more Scala goodies and an API based on the fantastic [Requests: HTTP for Humans](http://docs.python-requests.org/en/latest/) Python library.
 
