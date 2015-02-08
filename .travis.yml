@@ -6,3 +6,6 @@ jdk:
   - oraclejdk8
   - oraclejdk7
   - openjdk7
+cache:
+	directories:
+		- $HOME/.ivy2/cache
