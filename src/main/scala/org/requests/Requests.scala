@@ -38,7 +38,7 @@ object Requests {
   }
 }
 
-case class Requests(client: AsyncHttpClient) {
+class Requests(client: AsyncHttpClient) {
 
   /**
    * Executes an HTTP request.
