@@ -5,11 +5,8 @@ import com.ning.http.client.{
   AsyncHttpClientConfig,
   AsyncHttpClientConfigDefaults,
   AsyncCompletionHandler,
-  FluentCaseInsensitiveStringsMap,
-  Param => AHCParam,
   ProxyServer,
-  Response => AHCResponse,
-  RequestBuilder
+  Response => AHCResponse
 }
 
 import javax.net.ssl.SSLContext
@@ -17,7 +14,6 @@ import javax.net.ssl.SSLContext
 import org.requests.status.Status
 
 import scala.concurrent.{ Future, Promise }
-import scala.collection.JavaConverters.{ mapAsJavaMapConverter, seqAsJavaListConverter }
 
 object Requests {
 
@@ -69,50 +65,30 @@ class Requests(client: AsyncHttpClient) {
   ): Future[Response] = {
     val startTimeMillis = System.currentTimeMillis
 
-    val nsHeaders: FluentCaseInsensitiveStringsMap = {
-      val hs = (headers ++ Cookie.cookiesToHeader(cookies))
-        .map { case (name, values) =>
-          name -> values.asJava.asInstanceOf[java.util.Collection[String]]
-        }.asJava
-      new FluentCaseInsensitiveStringsMap(hs)
-    }
-
-    val queryParams: java.util.List[AHCParam] =
-      params.to[Seq].map { case (name, value) =>
-        new AHCParam(name, value)
-      }.asJava
-
-    // configure the request
-    val requestBuilder = new RequestBuilder(method.toString)
-      .setUrl(url)
-      .setFollowRedirects(allowRedirects)
-      .setHeaders(nsHeaders)
-      .addQueryParams(queryParams)
-      .setRequestTimeout(timeout.getOrElse(0)) // default to 0, falls back to client config
-      .setProxyServer(proxy.getOrElse(null))
-      .setRealm(auth.map(_.toRealm).getOrElse(null))
-
-    val requestBuilderWithBody: RequestBuilder = data match {
-      case EmptyData => requestBuilder
-      case ByteArrayData(ba) => requestBuilder.setBody(ba)
-      case StringData(s) => requestBuilder.setBody(s)
-      case FormData(formValues) =>
-        formValues.foldLeft(requestBuilder) { case (rb, (name, value)) =>
-          rb.addFormParam(name, value)
-        }
-      case MultipartData(bodyParts) =>
-        bodyParts.foldLeft(requestBuilder) { case (rb, bp) =>
-          rb.addBodyPart(bp.toPart)
-        }
-    }
+    val request = Request(
+      method = method,
+      url = url,
+      params = params,
+      data = data,
+      headers = headers,
+      cookies = cookies,
+      auth = auth,
+      timeout = timeout,
+      allowRedirects = allowRedirects,
+      proxy = proxy)
 
     val result = Promise[Response]()
 
     client.executeRequest(
-      requestBuilderWithBody.build(),
+      request.prepare,
       new AsyncCompletionHandler[AHCResponse]() {
         override def onCompleted(ahcResponse: AHCResponse): AHCResponse = {
-          result.success(Response.construct(ahcResponse, System.currentTimeMillis - startTimeMillis))
+          result.success(
+            Response.construct(
+              ahcr = ahcResponse,
+              elasped = System.currentTimeMillis - startTimeMillis,
+              request = request))
+
           ahcResponse
         }
         override def onThrowable(t: Throwable): Unit = {

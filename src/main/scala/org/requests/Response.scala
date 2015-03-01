@@ -16,7 +16,11 @@ object Response {
   /**
    * Constructs a Response from the java AHCResponse.
    */
-  def construct(ahcr: AHCResponse, elasped: Long = 0L): Response = {
+  def construct(
+    ahcr: AHCResponse,
+    elasped: Long,
+    request: Request): Response = {
+
     val headers: Map[String, Seq[String]] = {
       val hs = mapAsScalaMapConverter(ahcr.getHeaders).asScala
         .toSeq
@@ -38,6 +42,7 @@ object Response {
       elasped = elasped,
       headers = headers,
       isRedirect = ahcr.isRedirected,
+      request = request,
       status= status,
       url = ahcr.getUri.toString
     )
@@ -54,7 +59,7 @@ case class Response(
   //iterContent,
   //iterLines,
   //raw,
-  //request,
+  request: Request,
   status: Status,
   url: String) {
 
