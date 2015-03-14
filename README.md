@@ -7,12 +7,11 @@ Requests for Scala is a small library for making HTTP requests and built on top 
 
 ## Features
 
-- Default constructor gets you started making HTTP requests quickly
-- All request methods return regular `scala.concurrent.Future`s
-- Liberal usage of algebraic data types
+- Start quickly: a focus on less friction in making requests
+- Async: all request methods return `scala.concurrent.Future`s
 - Attempts to implement most of the [Requests](http://docs.python-requests.org/en/latest/api/) API where applicable
-- Wishlist features:
-    - Streaming responses
+- Wishlist:
+    - Streaming
     - Sessions
     - Redirect history
 
