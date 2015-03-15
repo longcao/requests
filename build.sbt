@@ -17,8 +17,6 @@ scalacOptions ++= Seq(
 
 autoAPIMappings := true
 
-fork in run := true
-
 resolvers += "Typesafe Releases" at "https://repo.typesafe.com/typesafe/releases/"
 
 bintrayPublishSettings
