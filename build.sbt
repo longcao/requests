@@ -4,7 +4,7 @@ name := "requests"
 
 version := "0.1.2"
 
-scalaVersion := "2.11.5"
+scalaVersion := "2.11.6"
 
 crossScalaVersions := Seq("2.10.5", "2.11.6")
 
