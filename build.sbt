@@ -19,6 +19,8 @@ autoAPIMappings := true
 
 resolvers += "Typesafe Releases" at "https://repo.typesafe.com/typesafe/releases/"
 
+tutSettings
+
 bintrayPublishSettings
 
 bintray.Keys.packageLabels in bintray.Keys.bintray := Seq("scala", "requests", "http", "http client", "async")
