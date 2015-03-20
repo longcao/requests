@@ -141,7 +141,6 @@ class Requests(client: AsyncHttpClient) {
   /**
    * Executes a GET request.
    *
-   * @param method          HTTP verb
    * @param url             request URL
    * @param params          map of query params
    * @param data            HTTP message body
@@ -180,7 +179,6 @@ class Requests(client: AsyncHttpClient) {
   /**
    * Executes a POST request.
    *
-   * @param method          HTTP verb
    * @param url             request URL
    * @param params          map of query params
    * @param data            HTTP message body
@@ -219,7 +217,6 @@ class Requests(client: AsyncHttpClient) {
   /**
    * Executes a PUT request.
    *
-   * @param method          HTTP verb
    * @param url             request URL
    * @param params          map of query params
    * @param data            HTTP message body
@@ -258,7 +255,6 @@ class Requests(client: AsyncHttpClient) {
   /**
    * Executes a PATCH request.
    *
-   * @param method          HTTP verb
    * @param url             request URL
    * @param params          map of query params
    * @param data            HTTP message body
@@ -297,7 +293,6 @@ class Requests(client: AsyncHttpClient) {
   /**
    * Executes a DELETE request.
    *
-   * @param method          HTTP verb
    * @param url             request URL
    * @param params          map of query params
    * @param data            HTTP message body
@@ -322,6 +317,44 @@ class Requests(client: AsyncHttpClient) {
   ): Future[Response] = {
     request(
       method = RequestMethod.DELETE,
+      url = url,
+      params = params,
+      data = data,
+      headers = headers,
+      cookies = cookies,
+      auth = auth,
+      timeout = timeout,
+      allowRedirects = allowRedirects,
+      proxy = proxy)
+  }
+
+  /**
+   * Executes an OPTIONS request.
+   *
+   * @param url             request URL
+   * @param params          map of query params
+   * @param data            HTTP message body
+   * @param headers         map of request headers
+   * @param cookies         collection of request [[org.requests.Cookie]]s
+   * @param auth            optional HTTP authentication configuration
+   * @param timeout         request timeout, in milliseconds
+   * @param allowRedirects  if true, follow redirects
+   * @param proxy           optional proxy configuration
+   * @return                a `Future` holding the resulting response
+   */
+  def options(
+    url: String,
+    params: Map[String, String] = Map.empty,
+    data: Data = EmptyData,
+    headers: Map[String, Seq[String]] = Map.empty,
+    cookies: Seq[Cookie] = Seq.empty,
+    auth: Option[Auth] = None,
+    timeout: Option[Int] = None,
+    allowRedirects: Boolean = true,
+    proxy: Option[ProxyServer] = None
+  ): Future[Response] = {
+    request(
+      method = RequestMethod.OPTIONS,
       url = url,
       params = params,
       data = data,
