@@ -3,7 +3,6 @@
 ```tut:invisible
 import org.requests._
 import org.requests.Implicits._
-import org.requests.status.Status
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ Await, Future }
