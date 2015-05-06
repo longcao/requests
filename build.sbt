@@ -9,13 +9,6 @@ scalaVersion := "2.11.6"
 crossScalaVersions := Seq("2.10.5", "2.11.6")
 
 scalacOptions ++= Seq(
-  "-Xlint",
-  "-deprecation",
-  "-feature",
-  "-unchecked"
-)
-
-scalacOptions ++= Seq(
   "-deprecation",
   "-encoding", "UTF-8",
   "-feature",
@@ -25,10 +18,17 @@ scalacOptions ++= Seq(
   "-Yno-adapted-args",
   "-Ywarn-dead-code",
   "-Ywarn-numeric-widen",
-  "-Ywarn-unused",
-  "-Ywarn-unused-import",
   "-Ywarn-value-discard"
 )
+
+scalacOptions ++= (CrossVersion.partialVersion(scalaVersion.value) match {
+  case Some((2, scalaMajor)) if scalaMajor >= 11 =>
+    Seq(
+      "-Ywarn-unused",
+      "-Ywarn-unused-import"
+    )
+  case _ => Seq.empty
+})
 
 autoAPIMappings := true
 
