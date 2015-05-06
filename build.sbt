@@ -15,6 +15,21 @@ scalacOptions ++= Seq(
   "-unchecked"
 )
 
+scalacOptions ++= Seq(
+  "-deprecation",
+  "-encoding", "UTF-8",
+  "-feature",
+  "-unchecked",
+  "-Xfatal-warnings",
+  "-Xlint",
+  "-Yno-adapted-args",
+  "-Ywarn-dead-code",
+  "-Ywarn-numeric-widen",
+  "-Ywarn-unused",
+  "-Ywarn-unused-import",
+  "-Ywarn-value-discard"
+)
+
 autoAPIMappings := true
 
 resolvers += "Typesafe Releases" at "https://repo.typesafe.com/typesafe/releases/"

@@ -93,6 +93,7 @@ class Requests(client: AsyncHttpClient) {
         }
         override def onThrowable(t: Throwable): Unit = {
           result.failure(t)
+          ()
         }
       }
     )
