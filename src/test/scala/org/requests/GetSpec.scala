@@ -1,7 +1,5 @@
 package org.requests
 
-import org.requests.Implicits._
-
 import play.api.libs.json.Json
 
 class GetSpec extends RequestsSpec {

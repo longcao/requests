@@ -2,7 +2,7 @@ package org.requests
 
 import org.scalatest.DoNotDiscover
 
-import scala.concurrent.ExecutionContext.Implicits.global
+//import scala.concurrent.ExecutionContext.Implicits.global
 
 @DoNotDiscover class DigestAuthSpec extends RequestsSpec {
   private val digestAuthUrl = "http://httpbin.org/digest-auth/auth/user/passwd"
