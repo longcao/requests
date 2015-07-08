@@ -11,5 +11,5 @@ resolvers += Resolver.url(
 addSbtPlugin("me.lessis" % "bintray-sbt" % "0.2.0")
 addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.0.4")
 addSbtPlugin("org.scoverage" % "sbt-coveralls" % "1.0.0.BETA1")
-addSbtPlugin("org.tpolecat" % "tut-plugin" % "0.3.2")
+addSbtPlugin("org.tpolecat" % "tut-plugin" % "0.4.0")
 
