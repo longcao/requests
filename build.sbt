@@ -36,9 +36,7 @@ resolvers += "Typesafe Releases" at "https://repo.typesafe.com/typesafe/releases
 
 tutSettings
 
-bintrayPublishSettings
-
-bintray.Keys.packageLabels in bintray.Keys.bintray := Seq("scala", "requests", "http", "http client", "async")
+bintrayPackageLabels := Seq("scala", "requests", "http", "http client", "async")
 
 licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
 
