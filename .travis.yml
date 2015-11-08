@@ -1,13 +1,26 @@
 language: scala
+
 scala:
-  - "2.10.4"
-  - "2.11.5"
+  - "2.10.6"
+  - "2.11.7"
+
 jdk:
   - oraclejdk8
   - oraclejdk7
   - openjdk7
+
 cache:
   directories:
     - $HOME/.ivy2/cache
+    - $HOME/.sbt/boot
+
 script: "sbt clean coverage test"
-after_success: "sbt coveralls"
+
+after_success:
+  - "sbt coveralls"
+
+  # See http://www.scala-sbt.org/0.13/docs/Travis-CI-with-sbt.html
+  # Tricks to avoid unnecessary cache updates
+  - find $HOME/.sbt -name "*.lock" | xargs rm
+  - find $HOME/.ivy2 -name "ivydata-*.properties" | xargs rm
+

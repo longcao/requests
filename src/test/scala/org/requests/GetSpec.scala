@@ -11,9 +11,8 @@ class GetSpec extends RequestsSpec {
     val cookies = Seq(
       Cookie(
         domain = "httpbin.org",
-        expires = Some(5),
         httpOnly = true,
-        maxAge = Some(10),
+        maxAge = Some(10L),
         name = Some("hello"),
         path = "/",
         secure = false,

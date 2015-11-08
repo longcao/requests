@@ -29,6 +29,17 @@ scalacOptions ++= (CrossVersion.partialVersion(scalaVersion.value) match {
     )
   case _ => Seq.empty
 })
+scalacOptions in (Compile, console) ~= {_.filterNot("-Ywarn-unused-import" == _)}
+scalacOptions in (Test, console) <<= (scalacOptions in (Compile, console))
+
+initialCommands in console :=
+  """
+    import org.requests._
+    import org.requests.status.Status
+    import org.requests.Implicits._
+    import scala.concurrent.ExecutionContext.Implicits.global
+    import scala.concurrent.Future
+  """
 
 autoAPIMappings := true
 
@@ -36,16 +47,13 @@ resolvers += "Typesafe Releases" at "https://repo.typesafe.com/typesafe/releases
 
 tutSettings
 
-bintrayPublishSettings
-
-bintray.Keys.packageLabels in bintray.Keys.bintray := Seq("scala", "requests", "http", "http client", "async")
+bintrayPackageLabels := Seq("scala", "requests", "http", "http client", "async")
 
 licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
 
 libraryDependencies ++= Seq(
-  "com.ning" % "async-http-client" % "1.9.20",
-  "org.slf4j" % "slf4j-simple" % "1.7.10",
+  "com.ning" % "async-http-client" % "1.9.31",
   "com.googlecode.juniversalchardet" % "juniversalchardet" % "1.0.3",
-  "org.scalatest" %% "scalatest" % "2.2.1" % "test",
-  "com.typesafe.play" %% "play-json" % "2.3.7" % "test"
+  "org.scalatest" %% "scalatest" % "2.2.5" % "test",
+  "com.typesafe.play" %% "play-json" % "2.3.10" % "test"
 )
