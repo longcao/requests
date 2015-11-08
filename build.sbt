@@ -29,6 +29,17 @@ scalacOptions ++= (CrossVersion.partialVersion(scalaVersion.value) match {
     )
   case _ => Seq.empty
 })
+scalacOptions in (Compile, console) ~= {_.filterNot("-Ywarn-unused-import" == _)}
+scalacOptions in (Test, console) <<= (scalacOptions in (Compile, console))
+
+initialCommands in console :=
+  """
+    import org.requests._
+    import org.requests.status.Status
+    import org.requests.Implicits._
+    import scala.concurrent.ExecutionContext.Implicits.global
+    import scala.concurrent.Future
+  """
 
 autoAPIMappings := true
 
