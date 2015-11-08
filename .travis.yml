@@ -14,7 +14,7 @@ cache:
     - $HOME/.ivy2/cache
 
 script:
-  "sbt clean coverage test"
+  - "sbt clean coverage test"
 
   # See http://www.scala-sbt.org/0.13/docs/Travis-CI-with-sbt.html
   # Tricks to avoid unnecessary cache updates
