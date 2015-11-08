@@ -23,6 +23,10 @@ Requests for Scala is cross published for 2.10.5 and 2.11.7. Add the Bintray res
 resolvers += Resolver.bintrayRepo("longcao", "maven")
 
 libraryDependencies += "org.requests" %% "requests" % "0.1.5"
+
+// java client underneath uses slf4j, add one of these to your deps if you don't want to deal with logging for now
+libraryDependencies += "org.slf4j" % "slf4j-nop" % "1.7.12"    // noop
+libraryDependencies += "org.slf4j" % "slf4j-simple" % "1.7.12" // all logging goes to console
 ```
 
 ## Quickstart

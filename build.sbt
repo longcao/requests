@@ -53,7 +53,6 @@ licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
 
 libraryDependencies ++= Seq(
   "com.ning" % "async-http-client" % "1.9.31",
-  "org.slf4j" % "slf4j-simple" % "1.7.12",
   "com.googlecode.juniversalchardet" % "juniversalchardet" % "1.0.3",
   "org.scalatest" %% "scalatest" % "2.2.5" % "test",
   "com.typesafe.play" %% "play-json" % "2.4.3" % "test"
