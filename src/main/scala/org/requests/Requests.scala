@@ -26,7 +26,7 @@ object Requests {
     sslContext: SSLContext = null
   ): Requests = {
     val config = new AsyncHttpClientConfig.Builder()
-      .setUserAgent("Requests.scala/0.1.5")
+      .setUserAgent("Requests.scala/0.1.6")
       .setAcceptAnyCertificate(!verify)
       .setSSLContext(sslContext)
 
