@@ -7,7 +7,7 @@ Requests for Scala is a small library for making HTTP requests and built on top 
 
 ## Features
 
-- Start quickly: a focus making requests simple
+- Start quickly: a focus on making requests simple
 - Async: all request methods return `scala.concurrent.Future`s
 - Attempts to implement most of the [Requests](http://docs.python-requests.org/en/latest/api/) API where applicable
 - Wishlist:
@@ -50,4 +50,4 @@ object Main extends App {
 
 ## Caveats
 
-This is a personal project of mine for a simpler, boiled down HTTP API without all the cute DSL nuances, and as such there's probably a lot wrong with it. If you need something production-ready (including more robust security settings, SSL, etc.) and generally easy to use, then I recommend you use [Play WS](https://www.playframework.com/documentation/2.3.x/ScalaWS) standalone, from which I took cues implementing a Scala facade over async-http-client.
+This is a personal project of mine for a simpler, boiled down HTTP API without all the cute DSL nuances, and as such there's probably a lot wrong with it. If you need something production-ready (including more robust security settings, SSL, etc.) and generally easy to use, then I recommend you use [Play WS](https://www.playframework.com/documentation/2.4.x/ScalaWS) standalone, from which I took cues implementing a Scala facade over async-http-client.
