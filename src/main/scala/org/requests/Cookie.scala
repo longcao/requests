@@ -10,9 +10,8 @@ object Cookie {
   def apply(ahcc: AHCCookie): Cookie = {
     Cookie(
       domain = ahcc.getDomain,
-      expires = if (ahcc.getExpires == -1) None else Some(ahcc.getExpires),
       httpOnly = ahcc.isHttpOnly,
-      maxAge = if (ahcc.getMaxAge == -1) None else Some(ahcc.getMaxAge),
+      maxAge = if (ahcc.getMaxAge == Long.MinValue) None else Some(ahcc.getMaxAge),
       name = if (ahcc.getName.isEmpty) None else Some(ahcc.getName),
       path = ahcc.getPath,
       secure = ahcc.isSecure,
@@ -43,9 +42,8 @@ object Cookie {
 
 case class Cookie(
   domain: String,
-  expires: Option[Long],
   httpOnly: Boolean,
-  maxAge: Option[Int],
+  maxAge: Option[Long],
   name: Option[String],
   path: String,
   secure: Boolean,
